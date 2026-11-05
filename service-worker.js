@@ -3,22 +3,19 @@ const CACHE_NAME = "ravi-gaming-v1";
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(["./", "./index.html"]);
+      return cache.addAll([
+        "./",
+        "./index.html",
+        "./manifest.json"
+      ]);
     })
   );
+
   self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
-      )
-    )
-  );
-  self.clients.claim();
+  event.waitUntil(self.clients.claim());
 });
 
 self.addEventListener("fetch", event => {
