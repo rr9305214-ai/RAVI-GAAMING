@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>RAVI GAMING</title>
+  <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#080d19">
 
 <style>
 * {
@@ -444,5 +446,14 @@ function playSound() {
 
 </script>
 
+  <script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js")
+      .then(() => console.log("RAVI GAMING App Ready"))
+      .catch(error => console.log(error));
+  });
+}
+</script>
 </body>
 </html>
