@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RAVI Click Challenge</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #101525;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+}
+
+header {
+  background: #080d19;
+  padding: 20px;
+  border-bottom: 3px solid #00d9ff;
+}
+
+h1 {
+  color: #00d9ff;
+}
+
+.game {
+  background: #1c2940;
+  width: 90%;
+  max-width: 450px;
+  margin: 35px auto;
+  padding: 30px 15px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #00d9ff44;
+}
+
+.score {
+  font-size: 25px;
+  margin: 20px;
+}
+
+#time {
+  color: #00d9ff;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#clickButton {
+  background: #00d9ff;
+  color: #08111d;
+  border: none;
+  padding: 25px 45px;
+  border-radius: 15px;
+  font-size: 25px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#clickButton:disabled {
+  background: #777;
+  cursor: not-allowed;
+}
+
+#startButton {
+  background: #18d878;
+  color: black;
+  border: none;
+  padding: 13px 25px;
+  border-radius: 8px;
+  font-size: 17px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+#message {
+  color: #00d9ff;
+  font-size: 20px;
+}
+</style>
+</head>
+
+<body>
+    <a href="index.html">🏠 Back to Home</a>
+
+<header>
+  <h1>⚡ RAVI CLICK CHALLENGE</h1>
+  <p>Test Your Clicking Speed!</p>
+</header>
+
+<div class="game">
+
+  <h2>🏆 Your Score</h2>
+
+  <div class="score">
+    <span id="score">0</span> Clicks
+  </div>
+
+  <h2>⏰ Time Left</h2>
+
+  <div id="time">10</div>
+
+  <br><br>
+
+  <button id="startButton" onclick="startGame()">
+    START GAME
+  </button>
+
+  <br>
+
+  <button id="clickButton" onclick="clickGame()" disabled>
+    CLICK ME!
+  </button>
+
+  <p id="message">Press Start to Play!</p>
+
+  <h3>🥇 High Score: <span id="highScore">0</span></h3>
+
+</div>
+
+<script>
+
+let score = 0;
+let timeLeft = 10;
+let gameActive = false;
+let timer = null;
+
+let highScore =
+  Number(localStorage.getItem("clickHighScore")) || 0;
+
+document.getElementById("highScore").innerText =
+  highScore;
+
+function startGame() {
+
+  clearInterval(timer);
+
+  score = 0;
+  timeLeft = 10;
+  gameActive = true;
+
+  document.getElementById("score").innerText = score;
+  document.getElementById("time").innerText = timeLeft;
+  document.getElementById("message").innerText =
+    "Game Started! Click Fast!";
+
+  document.getElementById("clickButton").disabled = false;
+  document.getElementById("startButton").disabled = true;
+
+  timer = setInterval(function() {
+
+    timeLeft--;
+
+    document.getElementById("time").innerText = timeLeft;
+
+    if (timeLeft <= 0) {
+      endGame();
+    }
+
+  }, 1000);
+
+}
+
+function clickGame() {
+
+  if (!gameActive) return;
+
+  score++;
+
+  document.getElementById("score").innerText = score;
+
+}
+
+function endGame() {
+
+  gameActive = false;
+  clearInterval(timer);
+
+  document.getElementById("clickButton").disabled = true;
+  document.getElementById("startButton").disabled = false;
+
+  if (score > highScore) {
+
+    highScore = score;
+
+    localStorage.setItem("clickHighScore", highScore);
+
+    document.getElementById("highScore").innerText =
+      highScore;
+
+    document.getElementById("message").innerText =
+      "🏆 New High Score! " + score;
+
+  } else {
+
+    document.getElementById("message").innerText =
+      "Game Over! Your Score: " + score;
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

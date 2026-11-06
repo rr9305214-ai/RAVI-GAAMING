@@ -1,0 +1,379 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAVI CARROM GAME</title>
+
+<style>
+body {
+  background: #101525;
+  color: white;
+  text-align: center;
+  font-family: Arial;
+}
+
+h1 { color: #00d9ff; }
+
+canvas {
+  background: #e6b878;
+  border: 10px solid #75431f;
+  border-radius: 12px;
+  max-width: 95%;
+  touch-action: none;
+}
+
+button {
+  padding: 12px 20px;
+  margin: 8px;
+  background: #00d9ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.scoreboard {
+  background: #1c2940;
+  padding: 12px;
+  margin: 15px auto;
+  max-width: 450px;
+  border-radius: 12px;
+  border: 2px solid #00d9ff;
+}
+
+#status { color: #ffd700; }
+</style>
+</head>
+
+<body>
+
+<h1>🎮 RAVI CARROM</h1>
+
+<div class="scoreboard">
+  <h2>🔵 Player 1: <span id="score1">0</span></h2>
+  <h2>🔴 Player 2: <span id="score2">0</span></h2>
+  <h3>Coins Pocketed: <span id="total">0</span></h3>
+  <h3 id="status">Player 1 Turn</h3>
+</div>
+
+<canvas id="board" width="500" height="500"></canvas>
+
+<br>
+<button onclick="resetGame()">🔄 Restart</button>
+<button onclick="pauseGame()" id="pauseBtn">⏸ Pause</button>
+
+<p>Striker को पीछे खींचकर छोड़ो।</p>
+
+<script>
+const canvas = document.getElementById("board");
+const ctx = canvas.getContext("2d");
+
+const pockets = [
+  {x:35,y:35},
+  {x:465,y:35},
+  {x:35,y:465},
+  {x:465,y:465}
+];
+
+let coins = [];
+let striker;
+let currentPlayer = 1;
+let scores = [0,0,0];
+let dragging = false;
+let dragX = 0, dragY = 0;
+let paused = false;
+let moving = false;
+
+function makeCoin(x,y,color,r=12) {
+  return {
+    x,y,color,r,
+    vx:0,vy:0,
+    active:true
+  };
+}
+
+function resetGame() {
+  coins = [
+    makeCoin(250,250,"red",13),
+    makeCoin(220,250,"black"),
+    makeCoin(280,250,"white"),
+    makeCoin(250,220,"black"),
+    makeCoin(250,280,"white"),
+    makeCoin(220,220,"white"),
+    makeCoin(280,280,"black"),
+    makeCoin(280,220,"white"),
+    makeCoin(220,280,"black"),
+  ];
+
+  striker = makeCoin(250,420,"blue",17);
+  currentPlayer = 1;
+  scores = [0,0,0];
+
+  updateScore();
+  draw();
+}
+
+function updateScore() {
+  document.getElementById("score1").innerText = scores[1];
+  document.getElementById("score2").innerText = scores[2];
+  document.getElementById("total").innerText = scores[0];
+
+  document.getElementById("status").innerText =
+    "Player " + currentPlayer + " Turn";
+}
+
+function drawCoin(c) {
+  if (!c.active) return;
+
+  ctx.beginPath();
+  ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+  ctx.fillStyle = c.color;
+  ctx.fill();
+  ctx.strokeStyle = "#333";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+}
+
+function draw() {
+  ctx.clearRect(0,0,500,500);
+
+  ctx.strokeStyle = "#75431f";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(35,35,430,430);
+
+  // Pockets
+  pockets.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,22,0,Math.PI*2);
+    ctx.fillStyle = "#171717";
+    ctx.fill();
+  });
+
+  // Shooting lines
+  ctx.strokeStyle = "#a16b32";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(90,390,320,25);
+  ctx.strokeRect(90,85,320,25);
+  shotInProgress = true;
+
+  coins.forEach(drawCoin);
+  drawCoin(striker);
+
+  // Aim line
+  if (dragging) {
+    ctx.beginPath();
+    ctx.moveTo(striker.x,striker.y);
+    ctx.lineTo(dragX,dragY);
+    ctx.strokeStyle = "#0088ff";
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+}
+
+function getPosition(e) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x:(e.clientX-rect.left)*500/rect.width,
+    y:(e.clientY-rect.top)*500/rect.height
+  };
+}
+
+canvas.addEventListener("pointerdown", e => {
+  if (paused || moving) return;
+
+  const p = getPosition(e);
+
+  if (Math.hypot(p.x-striker.x,p.y-striker.y) < striker.r+10) {
+    dragging = true;
+    dragX = p.x;
+    dragY = p.y;
+    canvas.setPointerCapture(e.pointerId);
+    draw();
+  }
+});
+
+canvas.addEventListener("pointermove", e => {
+  if (!dragging) return;
+  const p = getPosition(e);
+  dragX = p.x;
+  dragY = p.y;
+  draw();
+});
+
+canvas.addEventListener("pointerup", e => {
+  if (!dragging) return;
+
+  const p = getPosition(e);
+  let dx = striker.x-p.x;
+  let dy = striker.y-p.y;
+  let shotInProgress = false;
+
+  const power = Math.hypot(dx,dy);
+  const limit = 12;
+
+  if (power > 3) {
+    const speed = Math.min(power*0.12,limit);
+    striker.vx = dx * 0.20;
+    striker.vy = dy * 0.20;
+    moving = true;
+  }
+
+  dragging = false;
+  draw();
+});
+
+function collide(a,b) {
+  if (!a.active || !b.active) return;
+
+  let dx = b.x-a.x;
+  let dy = b.y-a.y;
+  let dist = Math.hypot(dx,dy);
+  let minDist = a.r+b.r;
+
+  if (dist === 0 || dist >= minDist) return;
+
+  let nx = dx/dist;
+  let ny = dy/dist;
+
+  let overlap = minDist-dist;
+  a.x -= nx*overlap/2;
+  a.y -= ny*overlap/2;
+  b.x += nx*overlap/2;
+  b.y += ny*overlap/2;
+
+  let relative = (a.vx-b.vx)*nx + (a.vy-b.vy)*ny;
+
+  if (relative > 0) {
+    let impulse = relative*0.85;
+    a.vx -= impulse*nx;
+    a.vy -= impulse*ny;
+    b.vx += impulse*nx;
+    b.vy += impulse*ny;
+  }
+}
+
+
+function pocketCheck(c) {
+  if (!c.active) return;
+
+  for (const p of pockets) {
+    if (Math.hypot(c.x - p.x, c.y - p.y) < 24) {
+
+      // Blue Striker को वापस लाओ
+      if (c === striker) {
+        c.x = 250;
+        c.y = 420;
+        c.vx = 0;
+        c.vy = 0;
+        return;
+      }
+
+      // बाकी गोटियाँ पॉकेट में रहेंगी
+      c.active = false;
+      scores[currentPlayer]++;
+      updateScore();
+      return;
+    }
+  }
+}
+
+
+
+function moveCoin(c) {
+  if (!c.active) return;
+
+  c.x += c.vx;
+  c.y += c.vy;
+
+  c.vx *= 0.985;
+  c.vy *= 0.985;
+
+  if (Math.abs(c.vx) < 0.04) c.vx = 0;
+  if (Math.abs(c.vy) < 0.04) c.vy = 0;
+
+  // पहले पॉकेट चेक करो
+  pocketCheck(c);
+
+  if (!c.active) return;
+
+  // Board boundary
+  const min = 55;
+  const max = 445;
+
+  // कोने के पास बॉर्डर बाउंस बंद
+  const nearCorner =
+    (c.x < 85 && c.y < 85) ||
+    (c.x > 415 && c.y < 85) ||
+    (c.x < 85 && c.y > 415) ||
+    (c.x > 415 && c.y > 415);
+
+  if (!nearCorner) {
+    if (c.x - c.r < min) {
+      c.x = min + c.r;
+      c.vx = Math.abs(c.vx) * 0.8;
+    }
+
+    if (c.x + c.r > max) {
+      c.x = max - c.r;
+      c.vx = -Math.abs(c.vx) * 0.8;
+    }
+
+    if (c.y - c.r < min) {
+      c.y = min + c.r;
+      c.vy = Math.abs(c.vy) * 0.8;
+    }
+
+    if (c.y + c.r > max) {
+      c.y = max - c.r;
+      c.vy = -Math.abs(c.vy) * 0.8;
+    }
+  }
+}
+
+
+function gameLoop() {
+    if (shotInProgress && !moving) {
+  currentPlayer = currentPlayer === 0 ? 1 : 0;
+  shotInProgress = false;
+  updateScore();
+}
+  if (!paused) {
+    let all = [...coins,striker];
+
+    all.forEach(moveCoin);
+
+    for (let i=0;i<all.length;i++) {
+      for (let j=i+1;j<all.length;j++) {
+        collide(all[i],all[j]);
+      }
+    }
+
+    moving = all.some(c =>
+      c.active && (Math.abs(c.vx)>0.04 || Math.abs(c.vy)>0.04)
+    );
+
+    if (!moving) {
+      striker.vx=0;
+      striker.vy=0;
+    }
+
+    draw();
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+function pauseGame() {
+  paused = !paused;
+  document.getElementById("pauseBtn").innerText =
+    paused ? "▶ Resume" : "⏸ Pause";
+}
+
+resetGame();
+gameLoop();
+</script>
+
+</body>
+</html>

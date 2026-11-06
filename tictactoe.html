@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RAVI Tic Tac Toe</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #101525;
+  color: white;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  color: #00d9ff;
+  margin-top: 30px;
+}
+
+.game {
+  width: 310px;
+  margin: 25px auto;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.cell {
+  height: 95px;
+  background: #1c2940;
+  border: 2px solid #00d9ff;
+  border-radius: 12px;
+  color: white;
+  font-size: 45px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cell:hover {
+  background: #293d5d;
+}
+
+#status {
+  color: #00d9ff;
+  font-size: 22px;
+  margin: 20px;
+}
+
+button.restart {
+  background: #00d9ff;
+  padding: 13px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.score {
+  font-size: 18px;
+  line-height: 1.8;
+}
+</style>
+</head>
+
+<body>
+    <a href="index.html">🏠 Back to Home</a>
+
+<h1>⭕ RAVI TIC TAC TOE</h1>
+
+<div class="score">
+  Player X Wins: <span id="xScore">0</span>
+  <br>
+  Player O Wins: <span id="oScore">0</span>
+  <br>
+  Draws: <span id="drawScore">0</span>
+</div>
+
+<div class="game">
+
+  <div class="board" id="board">
+
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+
+    <button class="cell"></button>
+    <button class="cell"></button>
+    <button class="cell"></button>
+
+  </div>
+
+</div>
+
+<h2 id="status">Player X Turn</h2>
+
+<button class="restart" onclick="restartGame()">
+  Restart Game
+</button>
+
+<script>
+
+let cells = document.querySelectorAll(".cell");
+
+let currentPlayer = "X";
+let gameActive = true;
+
+let xScore = 0;
+let oScore = 0;
+let drawScore = 0;
+
+let winningPatterns = [
+  [0,1,2],
+  [3,4,5],
+  [6,7,8],
+  [0,3,6],
+  [1,4,7],
+  [2,5,8],
+  [0,4,8],
+  [2,4,6]
+];
+
+cells.forEach((cell) => {
+
+  cell.addEventListener("click", function() {
+
+    if (cell.innerText !== "" || !gameActive) {
+      return;
+    }
+
+    cell.innerText = currentPlayer;
+
+    checkWinner();
+
+  });
+
+});
+
+function checkWinner() {
+
+  let winner = false;
+
+  for (let pattern of winningPatterns) {
+
+    let [a,b,c] = pattern;
+
+    if (
+      cells[a].innerText === currentPlayer &&
+      cells[b].innerText === currentPlayer &&
+      cells[c].innerText === currentPlayer
+    ) {
+      winner = true;
+      break;
+    }
+
+  }
+
+  if (winner) {
+
+    document.getElementById("status").innerText =
+      "🏆 Player " + currentPlayer + " Wins!";
+
+    if (currentPlayer === "X") {
+      xScore++;
+      document.getElementById("xScore").innerText = xScore;
+    } else {
+      oScore++;
+      document.getElementById("oScore").innerText = oScore;
+    }
+
+    gameActive = false;
+    return;
+  }
+
+  let draw = [...cells].every(
+    cell => cell.innerText !== ""
+  );
+
+  if (draw) {
+
+    document.getElementById("status").innerText =
+      "🤝 Match Draw!";
+
+    drawScore++;
+    document.getElementById("drawScore").innerText =
+      drawScore;
+
+    gameActive = false;
+    return;
+  }
+
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+
+  document.getElementById("status").innerText =
+    "Player " + currentPlayer + " Turn";
+
+}
+
+function restartGame() {
+
+  cells.forEach(cell => {
+    cell.innerText = "";
+  });
+
+  currentPlayer = "X";
+  gameActive = true;
+
+  document.getElementById("status").innerText =
+    "Player X Turn";
+
+}
+
+</script>
+
+</body>
+</html>
+ss
