@@ -63,6 +63,7 @@ button {
 <br>
 <button onclick="resetGame()">🔄 Restart</button>
 <button onclick="pauseGame()" id="pauseBtn">⏸ Pause</button>
+<button onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
 
 <p>Striker को पीछे खींचकर छोड़ो।</p>
 
@@ -85,6 +86,76 @@ let dragging = false;
 let dragX = 0, dragY = 0;
 let paused = false;
 let moving = false;
+let shotInProgress = false;
+
+let soundEnabled = true;
+let audioContext = null;
+let lastCollisionSound = 0;
+
+// SOUND SYSTEM
+function playTone(frequency, duration, type = "sine", volume = 0.12) {
+  if (!soundEnabled) return;
+
+  try {
+    if (!audioContext) {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      audioContext = new AudioCtx();
+    }
+
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
+
+    const oscillator = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+
+    oscillator.type = type;
+    oscillator.frequency.setValueAtTime(
+      frequency, audioContext.currentTime
+    );
+
+    gain.gain.setValueAtTime(volume, audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      0.001, audioContext.currentTime + duration
+    );
+
+    oscillator.connect(gain);
+    gain.connect(audioContext.destination);
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration);
+  } catch (e) {
+    // Sound unavailable: game still works.
+  }
+}
+
+function playShotSound() {
+  playTone(180, 0.12, "triangle", 0.16);
+}
+
+function playCollisionSound() {
+  const now = Date.now();
+
+  if (now - lastCollisionSound < 100) return;
+  lastCollisionSound = now;
+
+  playTone(550, 0.06, "triangle", 0.09);
+}
+
+function playPocketSound() {
+  playTone(700, 0.12, "sine", 0.15);
+  setTimeout(() => playTone(420, 0.18, "sine", 0.10), 90);
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+
+  document.getElementById("soundBtn").innerText =
+    soundEnabled ? "🔊 Sound ON" : "🔇 Sound OFF";
+
+  if (soundEnabled) playTone(600, 0.1);
+}
 
 function makeCoin(x,y,color,r=12) {
   return {
@@ -110,6 +181,12 @@ function resetGame() {
   striker = makeCoin(250,420,"blue",17);
   currentPlayer = 1;
   scores = [0,0,0];
+  dragging = false;
+  moving = false;
+  shotInProgress = false;
+  paused = false;
+
+  document.getElementById("pauseBtn").innerText = "⏸ Pause";
 
   updateScore();
   draw();
@@ -143,7 +220,6 @@ function draw() {
   ctx.lineWidth = 5;
   ctx.strokeRect(35,35,430,430);
 
-  // Pockets
   pockets.forEach(p => {
     ctx.beginPath();
     ctx.arc(p.x,p.y,22,0,Math.PI*2);
@@ -151,17 +227,14 @@ function draw() {
     ctx.fill();
   });
 
-  // Shooting lines
   ctx.strokeStyle = "#a16b32";
   ctx.lineWidth = 2;
   ctx.strokeRect(90,390,320,25);
   ctx.strokeRect(90,85,320,25);
-  shotInProgress = true;
 
   coins.forEach(drawCoin);
   drawCoin(striker);
 
-  // Aim line
   if (dragging) {
     ctx.beginPath();
     ctx.moveTo(striker.x,striker.y);
@@ -174,6 +247,7 @@ function draw() {
 
 function getPosition(e) {
   const rect = canvas.getBoundingClientRect();
+
   return {
     x:(e.clientX-rect.left)*500/rect.width,
     y:(e.clientY-rect.top)*500/rect.height
@@ -196,6 +270,7 @@ canvas.addEventListener("pointerdown", e => {
 
 canvas.addEventListener("pointermove", e => {
   if (!dragging) return;
+
   const p = getPosition(e);
   dragX = p.x;
   dragY = p.y;
@@ -208,16 +283,15 @@ canvas.addEventListener("pointerup", e => {
   const p = getPosition(e);
   let dx = striker.x-p.x;
   let dy = striker.y-p.y;
-  let shotInProgress = false;
 
   const power = Math.hypot(dx,dy);
-  const limit = 12;
 
   if (power > 3) {
-    const speed = Math.min(power*0.12,limit);
     striker.vx = dx * 0.20;
     striker.vy = dy * 0.20;
     moving = true;
+    shotInProgress = true;
+    playShotSound();
   }
 
   dragging = false;
@@ -247,22 +321,24 @@ function collide(a,b) {
 
   if (relative > 0) {
     let impulse = relative*0.85;
+
     a.vx -= impulse*nx;
     a.vy -= impulse*ny;
     b.vx += impulse*nx;
     b.vy += impulse*ny;
+
+    playCollisionSound();
   }
 }
-
 
 function pocketCheck(c) {
   if (!c.active) return;
 
   for (const p of pockets) {
-    if (Math.hypot(c.x - p.x, c.y - p.y) < 24) {
+    if (Math.hypot(c.x-p.x,c.y-p.y) < 24) {
 
-      // Blue Striker को वापस लाओ
       if (c === striker) {
+        playPocketSound();
         c.x = 250;
         c.y = 420;
         c.vx = 0;
@@ -270,16 +346,15 @@ function pocketCheck(c) {
         return;
       }
 
-      // बाकी गोटियाँ पॉकेट में रहेंगी
       c.active = false;
+      scores[0]++;
       scores[currentPlayer]++;
+      playPocketSound();
       updateScore();
       return;
     }
   }
 }
-
-
 
 function moveCoin(c) {
   if (!c.active) return;
@@ -293,16 +368,13 @@ function moveCoin(c) {
   if (Math.abs(c.vx) < 0.04) c.vx = 0;
   if (Math.abs(c.vy) < 0.04) c.vy = 0;
 
-  // पहले पॉकेट चेक करो
   pocketCheck(c);
 
   if (!c.active) return;
 
-  // Board boundary
   const min = 55;
   const max = 445;
 
-  // कोने के पास बॉर्डर बाउंस बंद
   const nearCorner =
     (c.x < 85 && c.y < 85) ||
     (c.x > 415 && c.y < 85) ||
@@ -310,35 +382,29 @@ function moveCoin(c) {
     (c.x > 415 && c.y > 415);
 
   if (!nearCorner) {
-    if (c.x - c.r < min) {
-      c.x = min + c.r;
-      c.vx = Math.abs(c.vx) * 0.8;
+    if (c.x-c.r < min) {
+      c.x = min+c.r;
+      c.vx = Math.abs(c.vx)*0.8;
     }
 
-    if (c.x + c.r > max) {
-      c.x = max - c.r;
-      c.vx = -Math.abs(c.vx) * 0.8;
+    if (c.x+c.r > max) {
+      c.x = max-c.r;
+      c.vx = -Math.abs(c.vx)*0.8;
     }
 
-    if (c.y - c.r < min) {
-      c.y = min + c.r;
-      c.vy = Math.abs(c.vy) * 0.8;
+    if (c.y-c.r < min) {
+      c.y = min+c.r;
+      c.vy = Math.abs(c.vy)*0.8;
     }
 
-    if (c.y + c.r > max) {
-      c.y = max - c.r;
-      c.vy = -Math.abs(c.vy) * 0.8;
+    if (c.y+c.r > max) {
+      c.y = max-c.r;
+      c.vy = -Math.abs(c.vy)*0.8;
     }
   }
 }
 
-
 function gameLoop() {
-    if (shotInProgress && !moving) {
-  currentPlayer = currentPlayer === 0 ? 1 : 0;
-  shotInProgress = false;
-  updateScore();
-}
   if (!paused) {
     let all = [...coins,striker];
 
@@ -355,8 +421,14 @@ function gameLoop() {
     );
 
     if (!moving) {
-      striker.vx=0;
-      striker.vy=0;
+      striker.vx = 0;
+      striker.vy = 0;
+
+      if (shotInProgress) {
+        currentPlayer = currentPlayer === 1 ? 2 : 1;
+        shotInProgress = false;
+        updateScore();
+      }
     }
 
     draw();
@@ -367,6 +439,7 @@ function gameLoop() {
 
 function pauseGame() {
   paused = !paused;
+
   document.getElementById("pauseBtn").innerText =
     paused ? "▶ Resume" : "⏸ Pause";
 }
