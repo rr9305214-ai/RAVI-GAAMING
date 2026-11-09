@@ -55,6 +55,8 @@ button,select{
 }
 button:hover{transform:translateY(-2px);filter:brightness(1.12)}
 #soundBtn{background:linear-gradient(135deg,#b8f28b,#59c77b)}
+/* Sound control is available only inside the Settings panel. */
+#soundBtn{display:none}
 #pauseBtn{background:linear-gradient(135deg,#ffe18a,#ffb347)}
 body>p{color:#dcecff;font-weight:600}
 body>div[style*="max-width:350px"]{
@@ -74,6 +76,23 @@ body>div[style*="max-width:350px"]{
 }
 .victoryBox h1{color:gold;font-size:32px}
 .victoryBox button{background:linear-gradient(135deg,#ffe889,#ffbd37)}
+#settingsPanel{
+  display:none;position:fixed;inset:0;z-index:1001;
+  background:rgba(2,8,20,.86);backdrop-filter:blur(7px);
+  align-items:center;justify-content:center;padding:16px;
+}
+.settingsBox{
+  width:min(92vw,390px);max-height:90vh;overflow:auto;text-align:left;
+  padding:22px;border-radius:20px;color:#f5f8ff;
+  background:linear-gradient(145deg,#19375c,#101d35);
+  border:1px solid #50dfff;box-shadow:0 15px 45px rgba(0,0,0,.5);
+}
+.settingsBox h2{text-align:center;color:#8cf0ff;margin:0 0 18px}
+.settingRow{display:block;margin:16px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.07)}
+.settingRow label{display:block;font-weight:700;margin-bottom:9px}
+.settingRow input[type=range],.settingRow select{width:100%;margin:4px 0}
+.settingsActions{text-align:center;margin-top:14px}
+#settingsBtn{background:linear-gradient(135deg,#c5a7ff,#8c67e8)}
 @media(max-width:480px){
   body{padding:18px 8px 28px}
   .scoreboard{padding:14px 10px}
@@ -81,6 +100,154 @@ body>div[style*="max-width:350px"]{
   canvas{border-width:7px;border-radius:14px}
   button{padding:11px 14px;margin:5px}
 }
+/* PLAYER PHOTOS ABOVE CARROM BOARD */
+.playersTop{
+  width:min(92vw,500px);
+  margin:0 auto 12px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+.playerPhotoCard{
+  flex:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+  border:1px solid #50dfff;
+  border-radius:15px;
+  background:linear-gradient(145deg,#19375c,#101d35);
+  box-shadow:0 5px 18px rgba(0,0,0,.35);
+}
+.playerAvatar{
+  width:55px;
+  height:55px;
+  flex-shrink:0;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  background:linear-gradient(145deg,#36dfff,#174b9c);
+  border:3px solid #8cf0ff;
+}
+/* AVATAR COUNTDOWN RING */
+.playerAvatar{
+  position:relative;
+  z-index:1;
+}
+
+.playerAvatar.timerActive::after{
+  content:"";
+  position:absolute;
+  inset:-8px;
+  border-radius:50%;
+  background:conic-gradient(
+    #00ff9d calc(var(--timer-progress,100) * 1%),
+    rgba(255,255,255,.15) 0
+  );
+  -webkit-mask:radial-gradient(
+    farthest-side,
+    transparent calc(100% - 5px),
+    #000 calc(100% - 4px)
+  );
+  mask:radial-gradient(
+    farthest-side,
+    transparent calc(100% - 5px),
+    #000 calc(100% - 4px)
+  );
+  filter:drop-shadow(0 0 5px #00ff9d);
+  pointer-events:none;
+}
+.robotAvatar{
+  background:linear-gradient(145deg,#444,#111);
+  border-color:#ff7777;
+}
+.playerInfo{
+  text-align:left;
+  font-size:12px;
+  font-weight:bold;
+}
+.playerInfo span{
+  display:block;
+  margin-top:5px;
+  font-size:19px;
+  color:#8cf0ff;
+}
+.robotInfo span{color:#ff7777}
+@media(max-width:380px){
+  .playerPhotoCard{padding:7px;gap:6px}
+  .playerAvatar{width:43px;height:43px;font-size:24px}
+  .playerInfo{font-size:10px}
+}
+.avatarScore{
+  display:block;
+  margin-top:5px;
+  font-size:20px;
+  color:#5bdcff;
+}
+.robotScore{
+  color:#ff7777;
+}
+.playerPhotoCard.activeTurn{
+  border:2px solid #00ff9d;
+  box-shadow:0 0 12px #00ff9d, 0 0 25px #00ff9d;
+  transform:scale(1.04);
+  transition:0.3s;
+}
+
+.playerPhotoCard:not(.activeTurn){
+  opacity:0.65;
+  transition:0.3s;
+}
+.statsBox{
+  width:min(92vw,500px);
+  margin:15px auto;
+  padding:15px;
+  border:1px solid #50dfff;
+  border-radius:15px;
+  background:linear-gradient(145deg,#19375c,#101d35);
+  box-shadow:0 8px 25px rgba(0,0,0,.3);
+}
+.statsBox h2{color:#8cf0ff;margin-top:0}
+.statsBox p{font-weight:bold;color:#fff}
+#fireworksLayer{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  pointer-events:none;
+  z-index:5;
+}
+
+#victoryScreen{
+  overflow:hidden;
+}
+
+.victoryBox{
+  position:relative;
+  z-index:6;
+}
+
+.fireworkSpark{
+  position:absolute;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  animation:fireworkBurst 1.2s ease-out forwards;
+  box-shadow:0 0 10px currentColor;
+}
+
+@keyframes fireworkBurst{
+  0%{
+    transform:translate(0,0) scale(1);
+    opacity:1;
+  }
+  100%{
+    transform:translate(var(--dx),var(--dy)) scale(.2);
+    opacity:0;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -89,7 +256,7 @@ body>div[style*="max-width:350px"]{
 
 <div class="scoreboard">
 <h2>🔵 Player 1: <span id="score1">0</span></h2>
-<h2>🔴 Player 2 (Robot): <span id="score2">0</span></h2>
+<h2>🔴 Player 2: <span id="score2">0</span></h2>
 <h3>Coins Pocketed: <span id="total">0</span></h3>
 <h3 id="status">Player 1 Turn</h3>
 <hr>
@@ -100,10 +267,79 @@ body>div[style*="max-width:350px"]{
 <option value="hard">Hard - स्मार्ट</option>
 </select>
 </div>
+<div class="statsBox">
+  <h2>🏆 GAME STATISTICS</h2>
+  <p>🔵 RAVI Wins: <span id="raviWins">0</span></p>
+  <p>🤖 Robot Wins: <span id="robotWins">0</span></p>
+  <p>🪙 Total Coins: <span id="allCoins">0</span></p>
+</div>
 
+<div class="playersTop">
+
+  <!-- PLAYER 1 -->
+  <div class="playerPhotoCard">
+    <div class="playerAvatar">👤</div>
+    <div class="playerInfo">
+      PLAYER 1
+      <span>RAVI</span>
+      <strong class="avatarScore" id="avatarScore1">0</strong>
+    </div>
+  </div>
+
+  <!-- ROBOT -->
+  <div class="playerPhotoCard">
+    <div class="playerAvatar robotAvatar">🤖</div>
+    <div class="playerInfo robotInfo">
+      PLAYER 2
+      <span id="player2Name">ROBOT</span>
+      <strong class="avatarScore robotScore" id="avatarScore2">0</strong>
+    </div>
+  </div>
+
+</div>
 <canvas id="board" width="500" height="500"></canvas>
 
+<div id="settingsPanel" role="dialog" aria-modal="true" aria-label="Game settings">
+  <div class="settingsBox">
+    <h2>⚙️ GAME SETTINGS</h2>
+    <button onclick="toggleSound()" id="soundBtn" style="display:none">🔊 Sound ON</button>
+    <div class="settingRow">
+      <label for="settingsSound">🔊 Sound</label>
+      <div class="settingRow">
+  <label for="playMode">🎮 Play Mode</label>
+  <select id="playMode">
+    <option value="robot">Player vs Robot</option>
+    <option value="player">Player vs Player</option>
+  </select>
+</div>
+      <select id="settingsSound"><option value="on">ON</option><option value="off">OFF</option></select>
+    </div>
+    <div class="settingRow">
+      <label for="gameSpeedControl">🎮 Game Speed: <span id="gameSpeedValue">1.0x</span></label>
+      <input id="gameSpeedControl" type="range" min="0.5" max="1.5" step="0.1" value="1">
+    </div>
+    <div class="settingRow">
+      <label for="strikerSpeedControl">🏏 Striker Speed: <span id="strikerSpeedValue">1.0x</span></label>
+      <input id="strikerSpeedControl" type="range" min="0.5" max="1.5" step="0.1" value="1">
+    </div>
+    <div class="settingRow">
+      <label for="boardTheme">🎨 Board Theme</label>
+      <select id="boardTheme">
+        <option value="wood">Classic Wood</option>
+        <option value="light">Light Cream</option>
+        <option value="dark">Dark Brown</option>
+        <option value="green">Green</option>
+      </select>
+    </div>
+    <div class="settingsActions">
+      <button onclick="closeSettings()">✅ DONE</button>
+      <button onclick="restartFromSettings()">🔄 RESTART GAME</button>
+    </div>
+  </div>
+</div>
+
 <div id="victoryScreen">
+  <div id="fireworksLayer"></div>
   <div class="victoryBox">
     <h1>🏆 VICTORY!</h1>
     <h2 id="winnerName">PLAYER 1 WINS!</h2>
@@ -113,9 +349,8 @@ body>div[style*="max-width:350px"]{
 </div>
 
 <br>
-<button onclick="resetGame()">🔄 Restart</button>
 <button onclick="pauseGame()" id="pauseBtn">⏸ Pause</button>
-<button onclick="toggleSound()" id="soundBtn">🔊 Sound ON</button>
+<button onclick="openSettings()" id="settingsBtn">⚙️ Settings</button>
 
 <p>Striker को पीछे खींचकर छोड़ो।</p>
 
@@ -135,7 +370,7 @@ const pockets=[
 ];
 
 let coins=[],striker,striker2;
-Effects=[];
+let hitEffects=[];
 let gameOver=false;
 let foulThisTurn=false;
 let queenPendingPlayer=0;
@@ -143,20 +378,85 @@ let queenCoin=null;
 let queenExtraTurnUsed=false;
 let shotQueenExtraTurnSnapshot=false;
 let currentPlayer=1;
+let playMode="robot";
+// 10 SECOND AVATAR TIMER
+let turnTimeLeft=10;
+let turnTimerInterval=null;
+
+function stopTurnTimer(){
+  clearInterval(turnTimerInterval);
+  turnTimerInterval=null;
+}
+
+function startTurnTimer(){
+  stopTurnTimer();
+
+  if(gameOver)return;
+
+  turnTimeLeft=10;
+
+  const avatars=document.querySelectorAll(".playerAvatar");
+
+  avatars.forEach((avatar,index)=>{
+    avatar.classList.toggle("timerActive",index===currentPlayer-1);
+    avatar.style.setProperty("--timer-progress",100);
+  });
+
+  turnTimerInterval=setInterval(()=>{
+    if(paused || moving || gameOver)return;
+
+    turnTimeLeft--;
+
+    const activeAvatar=avatars[currentPlayer-1];
+
+    if(activeAvatar){
+      activeAvatar.style.setProperty(
+        "--timer-progress",
+        Math.max(0,turnTimeLeft*10)
+      );
+    }
+
+    if(turnTimeLeft<=0){
+      stopTurnTimer();
+      finishTurn();
+    }
+  },1000);
+}
 let scores=[0,0,0];
 let dragging=false,dragX=0,dragY=0;
+let strikerRingAngle=0;
 let paused=false,moving=false;
 let shotInProgress=false,robotThinking=false;
+let robotAim=null;
 let coinPocketedThisTurn=false;
 let pocketedCoinsThisShot=[];
 let shotScoreSnapshot=[0,0,0];
 let shotCoinSnapshot=[];
+let pocketedByPlayer=[[],[],[]];
+let shotPocketedByPlayerSnapshot=[[],[],[]];
 let shotQueenPendingSnapshot=0;
 let shotQueenCoinSnapshot=null;
 let soundEnabled=true,audioContext=null;
 let lastCollisionSound=0;
 let robotLevel="hard";
 let strikerPower=50;
+let boardTheme="wood";
+let gameSpeed=1;
+let strikerSpeed=1;
+let gameStats=JSON.parse(localStorage.getItem("raviCarromStats"))||{
+  raviWins:0,
+  robotWins:0,
+  allCoins:0
+};
+
+function saveStats(){
+  localStorage.setItem("raviCarromStats",JSON.stringify(gameStats));
+  document.getElementById("raviWins").innerText=gameStats.raviWins;
+  document.getElementById("robotWins").innerText=gameStats.robotWins;
+  document.getElementById("allCoins").innerText=gameStats.allCoins;
+}
+
+saveStats();
 
 document.getElementById("powerBar").addEventListener("input",function(){
   strikerPower=Number(this.value);
@@ -165,6 +465,10 @@ document.getElementById("powerBar").addEventListener("input",function(){
 
 document.getElementById("robotLevel").addEventListener("change",function(){
   robotLevel=this.value;
+});
+document.getElementById("playMode").addEventListener("change",function(){
+  playMode=this.value;
+  resetGame();
 });
 
 // SOUND
@@ -201,6 +505,7 @@ function saveShotState(){
     y:coin.y,
     active:coin.active
   }));
+  shotPocketedByPlayerSnapshot=pocketedByPlayer.map(list=>list.slice());
   shotQueenPendingSnapshot=queenPendingPlayer;
   shotQueenCoinSnapshot=queenCoin;
   shotQueenExtraTurnSnapshot=queenExtraTurnUsed;
@@ -217,6 +522,7 @@ function undoShotForFoul(){
   }
 
   scores=shotScoreSnapshot.slice();
+  pocketedByPlayer=shotPocketedByPlayerSnapshot.map(list=>list.slice());
   queenPendingPlayer=shotQueenPendingSnapshot;
   queenCoin=shotQueenCoinSnapshot;
   queenExtraTurnUsed=shotQueenExtraTurnSnapshot;
@@ -225,26 +531,60 @@ function undoShotForFoul(){
   updateScore();
 }
 
-function playShotSound(){playTone(180,0.12,"triangle",0.16);}
+
+function playShotSound(){
+  playTone(180,0.10,"triangle",0.20);
+  setTimeout(()=>playTone(110,0.08,"sine",0.12),45);
+}
 
 function playCollisionSound(){
   const now=Date.now();
   if(now-lastCollisionSound<100)return;
   lastCollisionSound=now;
-  playTone(550,0.06,"triangle",0.09);
+
+  playTone(620,0.045,"triangle",0.10);
 }
 
 function playPocketSound(){
-  playTone(700,0.12,"sine",0.15);
-  setTimeout(()=>playTone(420,0.18,"sine",0.10),90);
+  playTone(520,0.10,"sine",0.16);
+  setTimeout(()=>playTone(740,0.12,"sine",0.16),100);
+  setTimeout(()=>playTone(980,0.16,"sine",0.13),210);
 }
 
-function toggleSound(){
-  soundEnabled=!soundEnabled;
-  document.getElementById("soundBtn").innerText=
-    soundEnabled?"🔊 Sound ON":"🔇 Sound OFF";
-  if(soundEnabled)playTone(600,0.1);
+
+// SETTINGS PANEL
+function openSettings(){
+  document.getElementById("settingsSound").value=soundEnabled?"on":"off";
+  document.getElementById("gameSpeedControl").value=gameSpeed;
+  document.getElementById("gameSpeedValue").innerText=gameSpeed.toFixed(1)+"x";
+  document.getElementById("strikerSpeedControl").value=strikerSpeed;
+  document.getElementById("strikerSpeedValue").innerText=strikerSpeed.toFixed(1)+"x";
+  document.getElementById("settingsPanel").style.display="flex";
 }
+function closeSettings(){
+  document.getElementById("settingsPanel").style.display="none";
+}
+function restartFromSettings(){
+  closeSettings();
+  resetGame();
+}
+document.getElementById("settingsSound").addEventListener("change",function(){
+  soundEnabled=this.value==="on";
+  document.getElementById("soundBtn").innerText=soundEnabled?"🔊 Sound ON":"🔇 Sound OFF";
+  if(soundEnabled)playTone(600,0.1);
+});
+document.getElementById("gameSpeedControl").addEventListener("input",function(){
+  gameSpeed=Number(this.value);
+  document.getElementById("gameSpeedValue").innerText=gameSpeed.toFixed(1)+"x";
+});
+document.getElementById("strikerSpeedControl").addEventListener("input",function(){
+  strikerSpeed=Number(this.value);
+  document.getElementById("strikerSpeedValue").innerText=strikerSpeed.toFixed(1)+"x";
+});
+document.getElementById("boardTheme").addEventListener("change",function(){
+  boardTheme=this.value;
+  draw();
+});
 
 // COINS
 function makeCoin(x,y,color,r=12){
@@ -268,6 +608,8 @@ function resetGame(){
   striker2=makeCoin(250,100,"darkblue",17);
   currentPlayer=1;
   scores=[0,0,0];
+  pocketedByPlayer=[[],[],[]];
+  shotPocketedByPlayerSnapshot=[[],[],[]];
   dragging=false;
   moving=false;
   shotInProgress=false;
@@ -287,24 +629,85 @@ function resetGame(){
   document.getElementById("victoryScreen").style.display="none";
   document.getElementById("pauseBtn").innerText="⏸ Pause";
   updateScore();
+  startTurnTimer();
   draw();
+}
+let fireworksTimer=null;
+
+function startFireworks(){
+  const layer=document.getElementById("fireworksLayer");
+  if(!layer)return;
+
+  clearInterval(fireworksTimer);
+  layer.innerHTML="";
+
+  function burst(){
+    const colors=["#ffdd33","#00eaff","#ff4d8d","#7cff6b","#ffffff"];
+
+    for(let i=0;i<24;i++){
+      const spark=document.createElement("span");
+      const angle=Math.PI*2*i/24;
+      const distance=45+Math.random()*65;
+
+      spark.className="fireworkSpark";
+      spark.style.left=(10+Math.random()*80)+"%";
+      spark.style.top=(15+Math.random()*65)+"%";
+      spark.style.color=colors[Math.floor(Math.random()*colors.length)];
+      spark.style.background=spark.style.color;
+      spark.style.setProperty("--dx",Math.cos(angle)*distance+"px");
+      spark.style.setProperty("--dy",Math.sin(angle)*distance+"px");
+
+      layer.appendChild(spark);
+      setTimeout(()=>spark.remove(),1300);
+    }
+  }
+
+  burst();
+  fireworksTimer=setInterval(burst,650);
+}
+
+function stopFireworks(){
+  clearInterval(fireworksTimer);
+  fireworksTimer=null;
+  document.getElementById("fireworksLayer").innerHTML="";
 }
 
 function showVictoryScreen(){
-  let winner=scores[1]>=9?"PLAYER 1":"ROBOT";
+  if(gameOver)return;
+
   gameOver=true;
-  document.getElementById("winnerName").innerText=winner+" WINS! 🎉";
+
+  let winner=scores[1]>=9?"PLAYER 1":"ROBOT";
+
+  document.getElementById("winnerName").innerText=
+    winner+" WINS! 🎉";
+
   document.getElementById("finalScore").innerText=
     "Player 1: "+scores[1]+" | Robot: "+scores[2];
+
   document.getElementById("victoryScreen").style.display="flex";
+
+  startFireworks();
 }
 
 function updateScore(){
   document.getElementById("score1").innerText=scores[1];
   document.getElementById("score2").innerText=scores[2];
+  document.getElementById("player2Name").innerText=
+  playMode==="robot"?"ROBOT":"PLAYER 2";
   document.getElementById("total").innerText=scores[0];
   document.getElementById("status").innerText=
-    currentPlayer===1?"Player 1 Turn":"🤖 Robot Turn";
+   currentPlayer===1
+?"Player 1 Turn"
+:(playMode==="robot"?"🤖 Robot Turn":"Player 2 Turn");
+
+  document.getElementById("avatarScore1").innerText=scores[1];
+  document.getElementById("avatarScore2").innerText=scores[2];
+  document.querySelectorAll(".playerPhotoCard")[0]
+  .classList.toggle("activeTurn", currentPlayer===1);
+
+document.querySelectorAll(".playerPhotoCard")[1]
+  .classList.toggle("activeTurn", currentPlayer===2);
 }
 
 // DRAW
@@ -343,7 +746,29 @@ function drawCoin(c){
   ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
   ctx.fillStyle=gradient;
   ctx.fill();
-  ctx.strokeStyle="#333";
+
+  // Teal and warm ivory glowing arcs rotate around the striker.
+  if(c===striker || c===striker2){
+    ctx.save();
+    ctx.lineCap="round";
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r+5,strikerRingAngle,strikerRingAngle+Math.PI*1.12);
+    ctx.strokeStyle="#20d6c5";
+    ctx.lineWidth=3.5;
+    ctx.shadowColor="#20d6c5";
+    ctx.shadowBlur=13;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r+5,strikerRingAngle+Math.PI,strikerRingAngle+Math.PI*2.12);
+    ctx.strokeStyle="#fff1d2";
+    ctx.lineWidth=3.5;
+    ctx.shadowColor="#fff1d2";
+    ctx.shadowBlur=13;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  ctx.strokeStyle=(c===striker || c===striker2) ? "#a855f7" : "#333";
   ctx.lineWidth=2;
   ctx.stroke();
 
@@ -358,26 +783,60 @@ function drawCoin(c){
   ctx.lineWidth=1.5;
   ctx.stroke();
 
-  // R LOGO - इसे वैसा ही रखा है
+  // Player 1 keeps the R; Computer striker gets a small robot face.
   if(c===striker){
     ctx.fillStyle="white";
     ctx.font="bold 18px Arial";
     ctx.textAlign="center";
     ctx.textBaseline="middle";
     ctx.fillText("R",c.x,c.y);
+  }else if(c===striker2){
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(c.x,c.y,c.r*.72,0,Math.PI*2);
+    ctx.fillStyle="#07182d";
+    ctx.fill();
+    ctx.strokeStyle="#9bdfff";
+    ctx.lineWidth=1.2;
+    ctx.stroke();
+    ctx.shadowColor="#28cfff";
+    ctx.shadowBlur=6;
+    ctx.fillStyle="#45eaff";
+    ctx.beginPath();
+    ctx.ellipse(c.x-c.r*.27,c.y-c.r*.08,c.r*.13,c.r*.19,-.25,0,Math.PI*2);
+    ctx.ellipse(c.x+c.r*.27,c.y-c.r*.08,c.r*.13,c.r*.19,.25,0,Math.PI*2);
+    ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.strokeStyle="#b5eaff";
+    ctx.lineWidth=1.4;
+    ctx.beginPath();
+    ctx.moveTo(c.x-c.r*.22,c.y+c.r*.34);
+    ctx.lineTo(c.x+c.r*.22,c.y+c.r*.34);
+    ctx.stroke();
+    ctx.restore();
   }
   ctx.restore();
 }
 
 function draw(){
+  strikerRingAngle=(strikerRingAngle+0.035)%(Math.PI*2);
   ctx.clearRect(0,0,500,500);
-  let boardGradient=ctx.createLinearGradient(0,0,500,500);
-  boardGradient.addColorStop(0,"#f7d69c");
-  boardGradient.addColorStop(.5,"#dba866");
-  boardGradient.addColorStop(1,"#f3ca8a");
-  ctx.fillStyle=boardGradient;
-  ctx.fillRect(0,0,500,500);
+  let themeColors={
+  wood:["#f7d69c","#dba866","#f3ca8a"],
+  light:["#fff1d2","#f4dfb5","#fff5dc"],
+  dark:["#9b7048","#654321","#8b5a2b"],
+  green:["#d4e8a5","#8ca96b","#b7c98a"]
+};
 
+let colors=themeColors[boardTheme]||themeColors.wood;
+
+let boardGradient=ctx.createLinearGradient(0,0,500,500);
+boardGradient.addColorStop(0,colors[0]);
+boardGradient.addColorStop(.5,colors[1]);
+boardGradient.addColorStop(1,colors[2]);
+
+ctx.fillStyle=boardGradient;
+ctx.fillRect(0,0,500,500);
   ctx.strokeStyle="#75431f";
   ctx.lineWidth=5;
   ctx.strokeRect(35,35,430,430);
@@ -398,6 +857,59 @@ function draw(){
   if(currentPlayer===1)drawCoin(striker);
   else drawCoin(striker2);
 
+  // Computer (Player 2): same complete aim-arrow design as Player 1.
+  // The guide is anchored at the launch position, so it does not travel with the striker.
+  if(currentPlayer===2 && robotAim && !moving){
+      const ux=Math.cos(robotAim.angle), uy=Math.sin(robotAim.angle);
+      const startX=robotAim.x+ux*striker2.r, startY=robotAim.y+uy*striker2.r;
+      // Aim line ko board ke aakhri kinare/pocket tak extend karo.
+      let rayLength=460;
+      const boardMin=35, boardMax=465;
+      const edgeDistances=[];
+      if(ux>0) edgeDistances.push((boardMax-startX)/ux);
+      if(ux<0) edgeDistances.push((boardMin-startX)/ux);
+      if(uy>0) edgeDistances.push((boardMax-startY)/uy);
+      if(uy<0) edgeDistances.push((boardMin-startY)/uy);
+      const validEdges=edgeDistances.filter(d=>d>0);
+      if(validEdges.length) rayLength=Math.min(rayLength,Math.min(...validEdges));
+      // Agar aim kisi pocket ki taraf hai to line pocket ke centre tak jaaye.
+      for(const pocket of pockets){
+        const px=pocket.x-startX, py=pocket.y-startY;
+        const along=px*ux+py*uy;
+        const across=Math.abs(px*uy-py*ux);
+        if(along>0 && across<25) rayLength=Math.min(rayLength,along);
+      }
+      const endX=startX+ux*rayLength, endY=startY+uy*rayLength;
+      const angle=Math.atan2(uy,ux);
+      ctx.save();
+
+      // Short, thicker rod behind the striker.
+      ctx.strokeStyle="#111";
+      ctx.lineWidth=4;
+      ctx.lineCap="round";
+      ctx.beginPath();
+      ctx.moveTo(startX,startY);
+      ctx.lineTo(startX-ux*52,startY-uy*52);
+      ctx.stroke();
+
+      // Slim glowing dotted aiming line.
+      ctx.shadowColor="#00eaff";
+      ctx.shadowBlur=16;
+      ctx.strokeStyle="rgba(0,235,255,.95)";
+      ctx.lineWidth=2;
+      ctx.setLineDash([3,5]);
+      ctx.lineCap="round";
+      ctx.beginPath();
+      ctx.moveTo(startX,startY);
+      ctx.lineTo(endX,endY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Arrowhead triangle removed; keep the long aiming line only.
+
+      ctx.restore();
+  }
+
   hitEffects.forEach(e=>{
     ctx.beginPath();
     ctx.arc(e.x,e.y,15-e.life/2,0,Math.PI*2);
@@ -407,58 +919,49 @@ function draw(){
   });
 
   if(dragging){
-    let dx=striker.x-dragX;
-    let dy=striker.y-dragY;
+    let activeStriker=getActiveStriker();
+let dx=activeStriker.x-dragX;
+let dy=activeStriker.y-dragY;
+  
     let length=Math.hypot(dx,dy);
 
     if(length>0){
       let aimX=dx/length;
       let aimY=dy/length;
       const guideLength=Math.min(220,90+length*1.8);
-      const endX=striker.x+aimX*guideLength;
-      const endY=striker.y+aimY*guideLength;
-
+      const endX=activeStriker.x+aimX*guideLength;
+      const endY=activeStriker.y+aimY*guideLength;
       // CLEAR AIM ARROW: drag direction is opposite to the shot direction
       ctx.save();
       const angle=Math.atan2(aimY,aimX);
 
-      // Bright arrow shaft with a soft glow
+      // Short, thicker guide rod behind the striker (as in the reference image).
+      ctx.save();
+      ctx.shadowBlur=0;
+      ctx.strokeStyle="#111";
+      ctx.lineWidth=4;
+      ctx.lineCap="round";
+      ctx.beginPath();
+      ctx.moveTo(activeStriker.x,activeStriker.y);
+      ctx.lineTo(activeStriker.x-aimX*52,activeStriker.y-aimY*52);
+      ctx.stroke();
+      ctx.restore();
+
+      // Keep the dotted aiming arrow slim; only the rear rod is thick.
       ctx.shadowColor="#00eaff";
       ctx.shadowBlur=16;
       ctx.strokeStyle="rgba(0,235,255,.95)";
-      ctx.lineWidth=4;
-      ctx.setLineDash([9,6]);
+      ctx.lineWidth=2;
+      ctx.setLineDash([3,5]);
       ctx.lineCap="round";
       ctx.beginPath();
-      ctx.moveTo(striker.x,striker.y);
+      ctx.moveTo(activeStriker.x,activeStriker.y);
       ctx.lineTo(endX,endY);
       ctx.stroke();
       ctx.setLineDash([]);
 
       // Large arrow head
-      ctx.fillStyle="#d8ffff";
-      ctx.strokeStyle="#00bfe8";
-      ctx.lineWidth=2;
-      ctx.beginPath();
-      ctx.moveTo(endX,endY);
-      ctx.lineTo(
-        endX-21*Math.cos(angle-Math.PI/6),
-        endY-21*Math.sin(angle-Math.PI/6)
-      );
-      ctx.lineTo(
-        endX-21*Math.cos(angle+Math.PI/6),
-        endY-21*Math.sin(angle+Math.PI/6)
-      );
-      ctx.closePath();
-      ctx.fill();
-      ctx.stroke();
-
-      // Small target ring at the arrow tip
-      ctx.beginPath();
-      ctx.arc(endX,endY,8,0,Math.PI*2);
-      ctx.strokeStyle="rgba(255,255,255,.95)";
-      ctx.lineWidth=2;
-      ctx.stroke();
+      
       ctx.restore();
     }
   }
@@ -474,11 +977,14 @@ function getPosition(e){
 }
 
 canvas.addEventListener("pointerdown",e=>{
-  if(gameOver||paused||moving||currentPlayer===2||robotThinking)return;
+  if(gameOver||paused||moving||robotThinking)return;
+if(currentPlayer===2 && playMode==="robot")return;
 
   const p=getPosition(e);
 
-  if(Math.hypot(p.x-striker.x,p.y-striker.y)<striker.r+10){
+  let activeStriker=getActiveStriker();
+
+if(Math.hypot(p.x-activeStriker.x,p.y-activeStriker.y)<activeStriker.r+10){
     dragging=true;
     dragX=p.x;
     dragY=p.y;
@@ -499,15 +1005,16 @@ canvas.addEventListener("pointerup",e=>{
   if(!dragging)return;
 
   const p=getPosition(e);
-  let dx=striker.x-p.x;
-  let dy=striker.y-p.y;
+ let activeStriker=getActiveStriker();
+let dx=activeStriker.x-p.x;
+let dy=activeStriker.y-p.y;
   let power=Math.hypot(dx,dy);
 
   if(power>3){
     saveShotState();
     let powerMultiplier=strikerPower/50;
-    striker.vx=dx*0.20*powerMultiplier;
-    striker.vy=dy*0.20*powerMultiplier;
+  activeStriker.vx=dx*0.20*powerMultiplier*strikerSpeed;
+activeStriker.vy=dy*0.20*powerMultiplier*strikerSpeed;
 
     moving=true;
     shotInProgress=true;
@@ -602,12 +1109,34 @@ function pocketCheck(c){
         foulThisTurn=true;
         undoShotForFoul();
 
-        // Striker pocket hone par current player ka 1 penalty point kam karo.
-        scores[currentPlayer]=Math.max(0,scores[currentPlayer]-1);
-        updateScore();
+        // Foul penalty: returned coin ke hisaab se points kato.
+const stolenCoinRecord = pocketedByPlayer[currentPlayer].pop();
+
+if(stolenCoinRecord){
+  const coinColor = stolenCoinRecord.coin.color;
+  const penalty = coinColor === "black" ? 10 : 20;
+
+  scores[currentPlayer] = Math.max(0, scores[currentPlayer] - penalty);
+
+  stolenCoinRecord.coin.active = true;
+  stolenCoinRecord.coin.x = stolenCoinRecord.x;
+  stolenCoinRecord.coin.y = stolenCoinRecord.y;
+  stolenCoinRecord.coin.vx = 0;
+  stolenCoinRecord.coin.vy = 0;
+
+  scores[0] = Math.max(0, scores[0] - 1);
+
+  document.getElementById("status").innerText =
+    "⚠️ Foul! Coin wapas! -" + penalty + " points";
+}else{
+  document.getElementById("status").innerText =
+    "⚠️ Foul! Wapas karne ke liye koi coin nahi hai.";
+}
+
+updateScore();
 
         document.getElementById("status").innerText=
-          "⚠️ Striker Foul! -1 Point";
+          stolenCoinRecord ? "⚠️ Foul! -1 penalty point aur 1 coin wapas!" : "⚠️ Foul! -1 Point (coin nahi tha)";
 
         return true;
       }
@@ -640,15 +1169,23 @@ function pocketCheck(c){
       }
 
       pocketedCoinsThisShot.push({coin:c,x:c.x,y:c.y});
+      const originalPosition=shotCoinSnapshot.find(item=>item.coin===c);
+      pocketedByPlayer[currentPlayer].push({
+        coin:c,
+        x:originalPosition?originalPosition.x:c.x,
+        y:originalPosition?originalPosition.y:c.y
+      });
       c.active=false;
       c.vx=0;
       c.vy=0;
       scores[0]++;
-      scores[currentPlayer]++;
+      gameStats.allCoins++;
+saveStats();
+      scores[currentPlayer] += c.color==="black" ? 10 : 20;
 
       // Queen cover: sirf queen ke baad pocket hui coin cover karegi.
       if(queenPendingPlayer===currentPlayer){
-        scores[currentPlayer]+=3;
+        scores[currentPlayer]+=50;
         queenPendingPlayer=0;
         queenCoin=null;
         queenExtraTurnUsed=false;
@@ -673,8 +1210,8 @@ function pocketCheck(c){
 function moveCoin(c){
   if(!c.active)return;
 
-  c.x+=c.vx;
-  c.y+=c.vy;
+c.x+=c.vx*gameSpeed*1.2;
+c.y+=c.vy*gameSpeed*1.2;
 
   c.vx*=0.985;
   c.vy*=0.985;
@@ -734,6 +1271,7 @@ function startRobotTurn(){
   if(currentPlayer!==2||paused||robotThinking)return;
 
   robotThinking=true;
+  robotAim=null;
 
   let settings={
     easy:{delay:1300,power:0.65,error:0.22},
@@ -818,12 +1356,22 @@ function startRobotTurn(){
       let power=Math.min(13,Math.max(6,distance*0.055));
       power*=level.power;
 
-      striker2.vx=Math.cos(angle)*power;
-      striker2.vy=Math.sin(angle)*power;
-
-      moving=true;
-      shotInProgress=true;
-      playShotSound();
+      // Show the computer's pull-back aim first, just like Player 1.
+      robotAim={x:striker2.x,y:striker2.y,angle};
+      setTimeout(()=>{
+        if(paused||currentPlayer!==2||gameOver){
+          robotAim=null;
+          robotThinking=false;
+          return;
+        }
+        striker2.vx=Math.cos(angle)*power;
+        striker2.vy=Math.sin(angle)*power;
+        moving=true;
+        shotInProgress=true;
+        playShotSound();
+        robotThinking=false;
+      },450);
+      return;
     }
 
     robotThinking=false;
@@ -846,32 +1394,39 @@ function isAnythingMoving(){
 
 // CHECK WINNER
 function checkWinner(){
-  if(scores[1]>=9||scores[2]>=9){
-    gameOver=true;
+  if(scores[1]>=100 || scores[2]>=100){
 
-    document.getElementById("winnerName").innerText=
-      scores[1]>=9?"PLAYER 1 WINS! 🎉":"ROBOT WINS! 🤖";
+    if(gameOver)return true;
 
-    document.getElementById("finalScore").innerText=
-      "Player 1: "+scores[1]+" | Robot: "+scores[2];
+    if(scores[1]>=100){
+      gameStats.raviWins++;
+    }else{
+      gameStats.robotWins++;
+    }
 
-    document.getElementById("victoryScreen").style.display="flex";
+    saveStats();
+    showVictoryScreen();
+
     return true;
   }
+
   return false;
 }
 
 // CHANGE TURN
 function finishTurn(){
+  stopTurnTimer();
+
   moving=false;
+  robotAim=null;
   shotInProgress=false;
 
-  // Queen pocket karne ke baad same player ko ek extra shot do.
-  // Agar us extra shot mein normal coin pocket nahi hui, Queen wapas lao.
+  // Queen extra shot
   if(queenPendingPlayer===currentPlayer && queenCoin && queenCoin.active===false){
     if(!queenExtraTurnUsed){
       queenExtraTurnUsed=true;
-      coinPocketedThisTurn=true; // same player ko extra shot
+      coinPocketedThisTurn=true;
+
       document.getElementById("status").innerText=
         "👑 Queen gayab hai! Ab ek coin pocket karke cover karo.";
     }else{
@@ -884,6 +1439,7 @@ function finishTurn(){
       queenCoin=null;
       queenExtraTurnUsed=false;
       coinPocketedThisTurn=false;
+
       document.getElementById("status").innerText=
         "👑 Cover nahi hui! Queen centre mein wapas aa gayi.";
     }
@@ -902,8 +1458,12 @@ function finishTurn(){
 
   updateScore();
 
-  if(!checkWinner()&&currentPlayer===2){
-    startRobotTurn();
+  if(!checkWinner()){
+    startTurnTimer();
+
+    if(currentPlayer===2 && playMode==="robot"){
+  startRobotTurn(); 
+    }
   }
 
   draw();
@@ -958,14 +1518,24 @@ function pauseGame(){
   if(!paused){
     draw();
 
-    if(currentPlayer===2&&!moving&&!robotThinking){
-      startRobotTurn();
-    }
+    if(currentPlayer===2 && playMode==="robot" && !moving && !robotThinking){
+  startRobotTurn();
+}
   }
 }
 
 // START GAME
 resetGame();
+function stopFireworks(){
+  clearInterval(fireworksTimer);
+  fireworksTimer=null;
+
+  const layer=document.getElementById("fireworksLayer");
+
+  if(layer){
+    layer.innerHTML="";
+  }
+}
 gameLoop();
 
 </script>
