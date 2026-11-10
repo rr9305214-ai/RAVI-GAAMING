@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Memory Card Game</title>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 25px 10px;
+  text-align: center;
+  font-family: Arial;
+  color: white;
+  background: radial-gradient(circle, #172554, #020617);
+}
+
+h1 {
+  color: #00eaff;
+  text-shadow: 0 0 15px #00eaff;
+}
+
+h2 {
+  color: #39ff14;
+}
+
+#board {
+  display: grid;
+  grid-template-columns: repeat(4, 75px);
+  gap: 12px;
+  justify-content: center;
+  margin: 25px auto;
+}
+
+.card {
+  height: 75px;
+  width: 75px;
+  border: 2px solid #00eaff;
+  border-radius: 12px;
+  background: #17243a;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  box-shadow: 0 0 10px #00eaff;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card.open {
+  background: #16b84e;
+  border-color: #39ff14;
+}
+
+button {
+  background: linear-gradient(90deg, #16b84e, #28ff00);
+  color: black;
+  padding: 13px 25px;
+  border: none;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px #39ff14;
+}
+
+p {
+  font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🧠 Memory Card Game</h1>
+
+<h2>Moves: <span id="moves">0</span></h2>
+<p>Find all matching pairs!</p>
+
+<div id="board"></div>
+
+<h2 id="message"></h2>
+
+<button onclick="startGame()">Restart Game</button>
+
+<script>
+const symbols = ["🍎","🍌","🍇","🍒","🍎","🍌","🍇","🍒",
+                 "⚽","🏀","🎮","🚗","⚽","🏀","🎮","🚗"];
+
+let cards = [];
+let first = null;
+let second = null;
+let lock = false;
+let moves = 0;
+let matched = 0;
+
+function startGame() {
+  cards = [...symbols].sort(() => Math.random() - 0.5);
+  first = null;
+  second = null;
+  lock = false;
+  moves = 0;
+  matched = 0;
+
+  document.getElementById("moves").textContent = 0;
+  document.getElementById("message").textContent = "";
+
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+
+  cards.forEach((symbol, index) => {
+    const card = document.createElement("button");
+    card.className = "card";
+    card.textContent = "?";
+    card.dataset.symbol = symbol;
+
+    card.onclick = () => flipCard(card);
+
+    board.appendChild(card);
+  });
+}
+
+function flipCard(card) {
+  if (lock || card.classList.contains("open")) return;
+
+  card.classList.add("open");
+  card.textContent = card.dataset.symbol;
+
+  if (!first) {
+    first = card;
+    return;
+  }
+
+  second = card;
+  moves++;
+
+  document.getElementById("moves").textContent = moves;
+
+  if (first.dataset.symbol === second.dataset.symbol) {
+    matched += 2;
+    first = null;
+    second = null;
+
+    if (matched === 16) {
+      document.getElementById("message").textContent =
+        "🎉 You Won! Great Job!";
+    }
+  } else {
+    lock = true;
+
+    setTimeout(() => {
+      first.textContent = "?";
+      second.textContent = "?";
+
+      first.classList.remove("open");
+      second.classList.remove("open");
+
+      first = null;
+      second = null;
+      lock = false;
+    }, 800);
+  }
+}
+
+startGame();
+</script>
+
+</body>
+</html>

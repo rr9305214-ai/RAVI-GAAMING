@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>RAVI Racing Game</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  text-align: center;
+  font-family: Arial;
+  color: white;
+  background: radial-gradient(circle, #172554, #020617);
+}
+
+h1 {
+  color: #00eaff;
+  text-shadow: 0 0 15px #00eaff;
+}
+
+h2 {
+  color: #39ff14;
+}
+
+canvas {
+  display: block;
+  margin: 15px auto;
+  background: #333;
+  border: 4px solid #00eaff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px #00eaff;
+  max-width: 95vw;
+}
+
+button {
+  padding: 12px 22px;
+  margin: 5px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #16b84e, #28ff00);
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px #39ff14;
+}
+
+p {
+  font-size: 17px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏎️ RAVI CAR RACING</h1>
+
+<h2>Score: <span id="score">0</span></h2>
+<h2>Best: <span id="best">0</span></h2>
+
+<canvas id="game" width="320" height="500"></canvas>
+
+<p>⬅️ Left / Right ➡️ या Arrow Keys दबाओ</p>
+
+<button onclick="moveLeft()">⬅️ LEFT</button>
+<button onclick="moveRight()">RIGHT ➡️</button>
+<br>
+<button onclick="restartGame()">RESTART GAME</button>
+
+<p id="message"></p>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let player, enemies, score, best, gameOver;
+let frame, roadLine;
+
+best = Number(localStorage.getItem("racingBest")) || 0;
+document.getElementById("best").textContent = best;
+
+function restartGame() {
+  player = {
+    x: 140,
+    y: 410,
+    width: 40,
+    height: 65
+  };
+
+  enemies = [];
+  score = 0;
+  frame = 0;
+  roadLine = 0;
+  gameOver = false;
+
+  document.getElementById("score").textContent = 0;
+  document.getElementById("message").textContent = "";
+
+  requestAnimationFrame(gameLoop);
+}
+
+function moveLeft() {
+  if (!gameOver && player.x > 45) {
+    player.x -= 45;
+  }
+}
+
+function moveRight() {
+  if (!gameOver && player.x < 235) {
+    player.x += 45;
+  }
+}
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "ArrowLeft" || e.key === "a") {
+    moveLeft();
+  }
+
+  if (e.key === "ArrowRight" || e.key === "d") {
+    moveRight();
+  }
+});
+
+function drawRoad() {
+  ctx.fillStyle = "#303030";
+  ctx.fillRect(0, 0, 320, 500);
+
+  ctx.fillStyle = "white";
+
+  ctx.fillRect(5, 0, 5, 500);
+  ctx.fillRect(310, 0, 5, 500);
+
+  roadLine += 6;
+  if (roadLine > 50) roadLine = 3;
+
+  for (let y = -50 + roadLine; y < 500; y += 100) {
+    ctx.fillRect(105, y, 5, 45);
+    ctx.fillRect(210, y, 5, 45);
+  }
+}
+
+function drawCar(car, color) {
+  ctx.fillStyle = color;
+  ctx.fillRect(car.x, car.y, car.width, car.height);
+
+  ctx.fillStyle = "#111";
+  ctx.fillRect(car.x + 5, car.y + 8, 30, 14);
+  ctx.fillRect(car.x + 5, car.y + 43, 30, 12);
+
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(car.x + 4, car.y + 2, 8, 5);
+  ctx.fillRect(car.x + 28, car.y + 2, 8, 5);
+}
+
+function gameLoop() {
+  if (gameOver) return;
+
+  frame++;
+
+  drawRoad();
+
+  // Player car
+  drawCar(player, "#00eaff");
+
+  // Enemy cars
+  if (frame % 65 === 0) {
+    const lanes = [35, 140, 245];
+    const x = lanes[Math.floor(Math.random() * lanes.length)];
+
+    enemies.push({
+      x: x,
+      y: -70,
+      width: 40,
+      height: 65
+    });
+  }
+
+  enemies.forEach(enemy => {
+    enemy.y += 4 + Math.min(score / 100, 5);
+
+    drawCar(enemy, "#ff1744");
+
+    // Collision
+    if (
+      player.x < enemy.x + enemy.width &&
+      player.x + player.width > enemy.x &&
+      player.y < enemy.y + enemy.height &&
+      player.y + player.height > enemy.y
+    ) {
+      gameOver = true;
+    }
+  });
+
+  enemies = enemies.filter(enemy => enemy.y < 520);
+
+  if (gameOver) {
+    if (score > best) {
+      best = score;
+      localStorage.setItem("racingBest", best);
+      document.getElementById("best").textContent = best;
+    }
+
+    document.getElementById("message").textContent =
+      "🏁 GAME OVER! Restart दबाओ।";
+    return;
+  }
+
+  if (frame % 10 === 0) {
+    score++;
+    document.getElementById("score").textContent = score;
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+restartGame();
+</script>
+
+</body>
+</html>
