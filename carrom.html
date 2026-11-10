@@ -350,7 +350,44 @@ body>div[style*="max-width:350px"]{
   font-size:14px;
   letter-spacing:2px;
 }
+/* GAME SCREEN START MEIN HIDE RAHEGI */
+body > h1,
+.scoreboard,
+.statsBox,
+.playersTop,
+#board,
+#pauseBtn,
+#leaveBtn,
+body > p,
+body > div[style*="max-width:350px"]{
+  display:none;
+}
 /* HOME SCREEN */
+
+.homeTopLeft{
+  position:absolute;
+  top:15px;
+  left:15px;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:10px;
+  z-index:99999;
+}
+
+.homeTopLeft button{
+  display:block;
+  width:125px;
+  margin:0;
+  padding:12px 8px;
+  background:linear-gradient(135deg,#19375c,#101d35);
+  color:#8cf0ff;
+  border:2px solid #50dfff;
+  border-radius:10px;
+  font-size:13px;
+}
+
+
 #homeScreen{
   position:fixed;
   inset:0;
@@ -547,37 +584,363 @@ body>div[style*="max-width:350px"]{
   color:#ffe28a;
   font-size:14px;
 }
+/* BOTTOM FOOTER NAVIGATION */
+#homeScreen{
+  padding-bottom:90px;
+}
+
+.bottomNav{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  min-height:75px;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  padding:8px 3px;
+  background:linear-gradient(145deg,#19375c,#080e1d);
+  border-top:1px solid #50dfff;
+  box-shadow:0 -5px 20px rgba(0,217,255,.15);
+}
+
+.navBtn{
+  flex:1;
+  margin:2px;
+  padding:8px 2px;
+  background:transparent;
+  color:#dcecff;
+  border:0;
+  box-shadow:none;
+  font-size:11px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+}
+
+.navBtn span{
+  font-size:23px;
+}
+
+.navBtn.active{
+  color:#8cf0ff;
+  text-shadow:0 0 10px #00d9ff;
+}
+
+#navPage{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:7500;
+  background:linear-gradient(145deg,#080e1d,#101c34);
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.navPageBox{
+  width:min(92vw,380px);
+  padding:25px;
+  border:1px solid #50dfff;
+  border-radius:20px;
+  background:linear-gradient(145deg,#19375c,#101d35);
+  box-shadow:0 0 25px #00d9ff44;
+  max-height:85vh;
+overflow-y:auto;
+}
+
+.navPageBox h2{
+  color:#8cf0ff;
+}
+
+.navPageBox p{
+  color:#dcecff;
+  line-height:1.6;
+}
+.friendsMenu{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-top:10px;
+}
+
+.friendAction{
+  width:100%;
+  padding:15px;
+  border:1px solid #50dfff;
+  border-radius:12px;
+  background:linear-gradient(120deg,#164b72,#101d35);
+  color:white;
+  font-size:16px;
+}
+
+.friendInput{
+  width:100%;
+  padding:13px;
+  border:1px solid #50dfff;
+  border-radius:9px;
+  background:#081426;
+  color:white;
+  font-size:15px;
+}
+
+.friendMessage{
+  color:#8cf0ff;
+  margin-top:12px;
+  font-size:13px;
+}
+/* EQUIPMENT SCREEN */
+
+.equipmentGrid{
+  display:flex;
+  flex-direction:row;
+  flex-wrap:nowrap;
+  gap:10px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  max-width:100%;
+  padding-bottom:10px;
+}
+
+.equipmentCard{
+  flex:0 0 140px;
+}
+.equipmentIcon{font-size:35px;margin:8px}
+.equipmentCard h3{font-size:14px;color:#8cf0ff}
+.equipmentCard p{font-size:12px;color:#ffe28a}
+.equipmentCard button{width:100%;margin:5px 0;padding:9px 4px}
+.equipmentBalance{
+  color:#ffe28a;
+  font-weight:bold;
+  font-size:17px;
+  margin:10px;
+}
+.homeCoinBox{
+  position:absolute;
+  top:20px;
+  right:15px;
+  padding:12px 18px;
+  background:linear-gradient(135deg,#19375c,#101d35);
+  color:#ffe28a;
+  border:2px solid #ffd95a;
+  border-radius:12px;
+  font-size:17px;
+  font-weight:bold;
+  box-shadow:0 0 15px #ffd95a55;
+}
+/* SHOP DESIGN */
+.shopBalance{
+  color:#ffe28a;
+  font-size:18px;
+  font-weight:bold;
+  margin:12px 0 20px;
+  padding:12px;
+  border:1px solid #ffd95a;
+  border-radius:12px;
+  background:#101d35;
+}
+
+.shopCategory{
+  color:#8cf0ff;
+  text-align:left;
+  margin:20px 0 10px;
+  font-size:17px;
+}
+
+.shopGrid{
+  display:flex;
+  gap:10px;
+  overflow-x:auto;
+  padding:5px 2px 14px;
+}
+
+.shopCard{
+  flex:0 0 135px;
+  padding:12px 8px;
+  border:1px solid #50dfff;
+  border-radius:14px;
+  background:linear-gradient(145deg,#19375c,#101d35);
+}
+
+.shopCard .shopIcon{
+  font-size:38px;
+  margin:8px;
+}
+
+.shopCard h4{
+  color:#fff;
+  font-size:13px;
+  min-height:32px;
+}
+
+.shopCard p{
+  color:#ffe28a;
+  font-weight:bold;
+  font-size:12px;
+}
+
+.shopCard button{
+  width:100%;
+  margin:5px 0;
+  padding:9px 3px;
+  font-size:12px;
+}
+
+.shopOwned{
+  background:linear-gradient(135deg,#65df91,#159b59);
+  color:#061421;
+}
+/* EVENT PAGE */
+.eventHeader{
+  color:#ffe28a;
+  font-size:22px;
+  font-weight:900;
+  margin:5px 0 15px;
+  text-shadow:0 0 12px #ffbf37;
+}
+.eventCard{
+  padding:16px;
+  margin:12px 0;
+  text-align:left;
+  border:1px solid #50dfff;
+  border-radius:16px;
+  background:linear-gradient(145deg,#19375c,#101d35);
+  box-shadow:0 6px 18px #0005;
+}
+.eventCard h3{
+  color:#8cf0ff;
+  margin:0 0 8px;
+}
+.eventCard p{
+  color:#dcecff;
+  font-size:13px;
+  line-height:1.5;
+}
+.eventReward{
+  color:#ffe28a;
+  font-weight:bold;
+  margin:10px 0;
+}
+.eventCard button{
+  width:100%;
+  margin:7px 0 0;
+}
+.eventCard button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+  transform:none;
+}
+.eventProgress{
+  height:10px;
+  background:#071426;
+  border-radius:20px;
+  overflow:hidden;
+  margin:10px 0;
+  border:1px solid #50dfff55;
+}
+.eventProgress span{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#00b8e6,#8cf0ff);
+  border-radius:20px;
+}
+.eventNote{
+  color:#ffe28a;
+  font-size:12px;
+  margin-top:8px;
+}
 
 </style>
 </head>
 <body>
 
-<div id="homeScreen">
-  <button type="button" onclick="openProfile()">
-  👤 PROFILE
-</button>
 
+
+<div id="homeScreen">
+
+  <!-- TOP LEFT BUTTONS -->
+  <div class="homeTopLeft">
+    <button type="button" onclick="openSettings()">
+      ⚙ SETTINGS
+    </button>
+
+    <button type="button" onclick="openProfile()">
+      👤 PROFILE
+    </button>
+  </div>
+
+  <!-- CENTER HOME CONTENT -->
   <div class="homeTitle">🎮 RAVI CARROM</div>
+  <div class="homeCoinBox">
+  🪙 COINS: <span id="homeCoinBalance">500</span>
+</div>
 
   <button type="button" id="startGameBtn" onclick="startGame()">
-  START GAME
-</button>
-<button type="button" onclick="openGameMode()">
-  🎮 GAME MODE
-</button>
+    ▶ START GAME
+  </button>
 
-<div id="selectedMode" style="color:#8cf0ff;margin:8px">
-  Selected: PLAY VS COMPUTER
+  <button type="button" onclick="openGameMode()">
+    🎮 GAME MODE
+  </button>
+
+  <div id="selectedMode" style="color:#8cf0ff;margin:8px">
+    Selected: PLAY VS COMPUTER
+  </div>
+
+  <!-- BOTTOM NAVIGATION -->
+  <div class="bottomNav">
+
+    <button class="navBtn active" onclick="showNavPage('home')">
+      <span>🏠</span>
+      Home
+    </button>
+
+    <button class="navBtn" onclick="showNavPage('friends')">
+      <span>👥</span>
+      Friends
+    </button>
+
+    <button class="navBtn" onclick="showNavPage('equipment')">
+      <span>🎯</span>
+      Equipment
+    </button>
+
+    <button class="navBtn" onclick="showNavPage('event')">
+      <span>🏆</span>
+      Event
+    </button>
+
+    <button class="navBtn" onclick="showNavPage('shop')">
+      <span>🛒</span>
+      Shop
+    </button>
+
+  </div>
 </div>
-  <button type="button" class="settings-btn" onclick="event.stopPropagation(); openSettings();">
-  ⚙
-</button>
+
+
+<!-- FOOTER PAGES -->
+<div id="navPage">
+  <div class="navPageBox">
+
+    <h2 id="navPageTitle">FRIENDS</h2>
+
+    <div id="navPageContent"></div>
+
+    <button onclick="closeNavPage()">
+      🏠 BACK TO HOME
+    </button>
+
+  </div>
 </div>
 <div id="profilePanel">
   <div class="profileBox">
     <h2>👤 MY PROFILE</h2>
 
     <div class="profileAvatar">👤</div>
+    
 
     <h3 id="profileName">RAVI</h3>
 
@@ -677,7 +1040,7 @@ body>div[style*="max-width:350px"]{
   <p>🤖 Robot Wins: <span id="robotWins">0</span></p>
   <p>🪙 Total Coins: <span id="allCoins">0</span></p>
 </div>
-
+  
 <div class="playersTop">
 
   <!-- PLAYER 1 -->
@@ -710,7 +1073,7 @@ body>div[style*="max-width:350px"]{
 
 <div id="settingsPanel" role="dialog" aria-modal="true" aria-label="Game settings">
   <div class="settingsBox">
-    <h2>⚙️ GAME SETTINGS</h2>
+    <h1>⚙️ GAME SETTINGS</h1>
     <button onclick="toggleSound()" id="soundBtn" style="display:none">🔊 Sound ON</button>
     <div class="settingRow">
       <label for="settingsSound">🔊 Sound</label>
@@ -738,14 +1101,22 @@ body>div[style*="max-width:350px"]{
         <option value="light">Light Cream</option>
         <option value="dark">Dark Brown</option>
         <option value="green">Green</option>
+       
       </select>
     </div>
     <div class="settingsActions">
-      <button onclick="closeSettings()">✅ DONE</button>
-      <button onclick="restartFromSettings()">🔄 RESTART GAME</button>
-    </div>
+  <button onclick="closeSettings()">✅ DONE</button>
+
+  <button onclick="restartFromSettings()">🔄 RESTART GAME</button>
+
+  <button onclick="logoutGame()"
+    style="background:linear-gradient(135deg,#ff7777,#d71940);color:white;width:90%">
+    🚪 LOGOUT
+  </button>
+</div>
   </div>
 </div>
+
 
 <div id="victoryScreen">
   <div id="fireworksLayer"></div>
@@ -758,7 +1129,15 @@ body>div[style*="max-width:350px"]{
 </div>
 
 <br>
-<button onclick="pauseGame()" id="pauseBtn">⏸ Pause</button>
+
+<button onclick="pauseGame()" id="pauseBtn">
+  ⏸ Pause
+</button>
+
+<button onclick="leaveGame()" id="leaveBtn"
+style="background:linear-gradient(135deg,#ff7777,#d71940);color:white">
+  🚪 LEAVE GAME
+</button>
 
 <p>Striker को पीछे खींचकर छोड़ो।</p>
 
@@ -770,6 +1149,7 @@ style="width:90%;accent-color:#00d9ff">
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
 
 
 <script>
@@ -1109,7 +1489,11 @@ function playCollisionSound(){
 }
 
 function playPocketSound(){
-  // VICTORY SOUND
+  playTone(520,0.10,"sine",0.16);
+  setTimeout(()=>playTone(740,0.12,"sine",0.16),100);
+  setTimeout(()=>playTone(980,0.16,"sine",0.13),210);
+}
+
 function playVictorySound(){
   if(!soundEnabled)return;
 
@@ -1117,7 +1501,13 @@ function playVictorySound(){
   setTimeout(()=>playTone(659,0.25,"sine",0.25),250);
   setTimeout(()=>playTone(784,0.25,"sine",0.25),500);
   setTimeout(()=>playTone(1047,0.6,"sine",0.3),750);
-}
+
+
+  playTone(523,0.25,"sine",0.25);
+  setTimeout(()=>playTone(659,0.25,"sine",0.25),250);
+  setTimeout(()=>playTone(784,0.25,"sine",0.25),500);
+  setTimeout(()=>playTone(1047,0.6,"sine",0.3),750);
+
   playTone(520,0.10,"sine",0.16);
   setTimeout(()=>playTone(740,0.12,"sine",0.16),100);
   setTimeout(()=>playTone(980,0.16,"sine",0.13),210);
@@ -1139,13 +1529,58 @@ function openSettings(){
 
   document.getElementById("settingsPanel").style.display = "flex";
 }
+
 function closeSettings(){
-  document.getElementById("settingsPanel").style.display="none";
+  document.getElementById("settingsPanel").style.display = "none";
 }
+
+// LOGOUT FUNCTION
+async function logoutGame(){
+
+  if(!confirm("Are you sure you want to logout?")){
+    return;
+  }
+
+  try{
+
+    // Firebase logout
+    if(firebaseReady && auth && auth.currentUser){
+      await auth.signOut();
+    }
+
+    // Game stop
+    stopTurnTimer();
+    stopFireworks();
+
+    paused = true;
+    moving = false;
+    robotThinking = false;
+    dragging = false;
+    positioningStriker = false;
+
+    // Hide all screens
+    document.getElementById("settingsPanel").style.display = "none";
+    document.getElementById("homeScreen").style.display = "none";
+    document.getElementById("profilePanel").style.display = "none";
+    document.getElementById("gameModePanel").style.display = "none";
+    document.getElementById("victoryScreen").style.display = "none";
+
+    // Show login screen
+    document.getElementById("signInScreen").style.display = "flex";
+
+    document.getElementById("loginMessage").innerText =
+      "Successfully Logged Out!";
+
+  }catch(error){
+    alert("Logout Error: " + error.message);
+  }
+}
+
 function restartFromSettings(){
   closeSettings();
   resetGame();
 }
+
 document.getElementById("settingsSound").addEventListener("change",function(){
   soundEnabled=this.value==="on";
   document.getElementById("soundBtn").innerText=soundEnabled?"🔊 Sound ON":"🔇 Sound OFF";
@@ -1257,8 +1692,7 @@ function showVictoryScreen(){
 
   stopTurnTimer();
 playVictorySound();
-  let winner=scores[1]>=9?"PLAYER 1":"ROBOT";
-
+ let winner=scores[1]>=100?"PLAYER 1":(playMode==="player"?"PLAYER 2":"ROBOT");
   document.getElementById("winnerName").innerText=
     winner+" WINS! 🎉";
 
@@ -2051,15 +2485,32 @@ function isAnythingMoving(){
 
 // CHECK WINNER
 function checkWinner(){
-  if(scores[1]>=100 || scores[2]>=100){
+  if(gameOver) return true;
 
-    if(gameOver)return true;
+  if(scores[1] >= 100 || scores[2] >= 100){
 
-    if(scores[1]>=100){
-      gameStats.raviWins++;
-    }else{
-      gameStats.robotWins++;
-    }
+   if(scores[1] >= 100){
+  gameStats.raviWins++;
+
+  const week=getWeekKey();
+  const oldWeek=localStorage.getItem("raviWeeklyWinWeek");
+
+  if(oldWeek!==week){
+    localStorage.setItem("raviWeeklyWinWeek",week);
+    localStorage.setItem("raviWeeklyWins","0");
+  }
+
+  let weeklyWins=Number(
+    localStorage.getItem("raviWeeklyWins")||0
+  );
+
+  localStorage.setItem("raviWeeklyWins",String(weeklyWins+1));
+
+}else{
+  gameStats.robotWins++;
+}
+
+    gameStats.totalGames = (gameStats.totalGames || 0) + 1;
 
     saveStats();
     showVictoryScreen();
@@ -2069,7 +2520,6 @@ function checkWinner(){
 
   return false;
 }
-
 // CHANGE TURN
 function finishTurn(){
   stopTurnTimer();
@@ -2196,14 +2646,10 @@ const loadingInterval = setInterval(function(){
   if(loadingValue >= 100){
     clearInterval(loadingInterval);
 
-    setTimeout(function(){
-      document.getElementById("loadingScreen").classList.add("hide");
+    // Loading screen hide hone ke baad login dikhao
+    document.getElementById("signInScreen").style.display = "flex";
 
-      setTimeout(function(){
-       document.getElementById("signInScreen").style.display = "flex";
-      },700);
-
-    },300);
+    document.getElementById("loadingScreen").classList.add("hide");
   }
 },25);
 function openGameMode(){
@@ -2231,7 +2677,26 @@ function chooseGameMode(mode){
 
 // START GAME
 function startGame(){
+
   document.getElementById("homeScreen").style.display = "none";
+
+  // Show game elements
+  document.querySelector("body > h1").style.display = "block";
+  document.querySelector(".scoreboard").style.display = "block";
+  document.querySelector(".statsBox").style.display = "block";
+  document.querySelector(".playersTop").style.display = "flex";
+  document.getElementById("board").style.display = "block";
+  document.getElementById("pauseBtn").style.display = "inline-block";
+  document.getElementById("leaveBtn").style.display = "inline-block";
+
+  document.querySelector("body > p").style.display = "block";
+  document.querySelector('body > div[style*="max-width:350px"]').style.display = "block";
+  const powerPanel = document.querySelector('div[style*="max-width:350px"]');
+
+if (powerPanel) {
+  powerPanel.style.display = "block";
+}
+
   resetGame();
 }
 // GAME INITIALIZATION
@@ -2240,6 +2705,733 @@ stopTurnTimer();
 
 // START GAME LOOP
 requestAnimationFrame(gameLoop);
+
+ 
+
+// JOIN ROOM
+function joinCarromRoom(){
+
+  const input = document.getElementById("joinRoomInput");
+  const roomID = input.value.trim();
+
+  if(!/^[0-9]{6}$/.test(roomID)){
+    showFriendMessage("Please enter a valid 6 digit Room ID.");
+    return;
+  }
+
+  showFriendMessage(
+    "Room ID " + roomID + " entered. Online joining needs Firebase room connection."
+  );
+}
+
+// INVITE FRIENDS
+async function inviteCarromFriends(){
+
+  if(!currentRoomID){
+    showFriendMessage("First create a room!");
+    return;
+  }
+
+  const inviteText =
+    "Join my Ravi Carrom Room! Room ID: " + currentRoomID;
+
+  try{
+
+    if(navigator.share){
+      await navigator.share({
+        title:"Ravi Carrom",
+        text:inviteText
+      });
+    }
+    else{
+      await navigator.clipboard.writeText(inviteText);
+      showFriendMessage("Invite message copied!");
+    }
+
+  }
+  catch(error){
+    showFriendMessage("Invite cancelled or could not be shared.");
+  }
+}
+
+// ADD FRIEND
+function addCarromFriend(){
+
+  const input = document.getElementById("friendIdInput");
+  const friendID = input.value.trim();
+
+  if(friendID.length < 3){
+    showFriendMessage("Please enter a valid Friend ID.");
+    return;
+  }
+
+  if(carromFriends.includes(friendID)){
+    showFriendMessage("Friend already added!");
+    return;
+  }
+
+  carromFriends.push(friendID);
+
+  input.value = "";
+
+  const list = document.getElementById("friendList");
+
+  list.innerHTML = "<h3>My Friends</h3>";
+
+  carromFriends.forEach(id=>{
+
+    const item = document.createElement("p");
+    item.innerText = "👤 " + id;
+
+    list.appendChild(item);
+
+  });
+
+  showFriendMessage("Friend ID added to this session!");
+}
+
+// EQUIPMENT SYSTEM
+let savedEquipmentCoins = localStorage.getItem("raviEquipmentCoins");
+let equipmentCoins;
+
+if(savedEquipmentCoins === null){
+  equipmentCoins = 500;
+  localStorage.setItem("raviEquipmentCoins", String(equipmentCoins));
+}else{
+  equipmentCoins = Number(savedEquipmentCoins);
+
+  if(!Number.isFinite(equipmentCoins)){
+    equipmentCoins = 500;
+    localStorage.setItem("raviEquipmentCoins", String(equipmentCoins));
+  }
+}
+
+let equipmentOwned = JSON.parse(
+  localStorage.getItem("raviEquipmentOwned") || '["classic","normal","blue","wood"]'
+);
+
+let equipmentSelected = JSON.parse(
+  localStorage.getItem("raviEquipmentSelected") ||
+  '{"striker":"classic","coins":"normal","strikerSkin":"blue","board":"wood"}'
+);
+
+const equipmentItems = {
+  striker:[
+    {id:"classic",name:"Classic Striker",icon:"🔵",price:0},
+    {id:"power",name:"Power Striker",icon:"⚡",price:200},
+    {id:"gold",name:"Golden Striker",icon:"🥇",price:400}
+  ],
+  coins:[
+    {id:"normal",name:"Classic Coins",icon:"⚫",price:0},
+    {id:"neon",name:"Neon Coins",icon:"💠",price:250},
+    {id:"goldcoins",name:"Golden Coins",icon:"🪙",price:500}
+  ],
+  strikerSkin:[
+    {id:"blue",name:"Blue Skin",icon:"🔵",price:0},
+    {id:"red",name:"Red Skin",icon:"🔴",price:150},
+    {id:"purple",name:"Purple Skin",icon:"🟣",price:250},
+    {id:"goldskin",name:"Gold Skin",icon:"🟡",price:400}
+  ],
+  board:[
+    {id:"wood",name:"Classic Wood",icon:"🟫",price:0},
+    {id:"green",name:"Green Board",icon:"🟩",price:200},
+    {id:"dark",name:"Dark Board",icon:"⬛",price:300},
+    {id:"light",name:"Cream Board",icon:"⬜",price:300}
+  ]
+};
+
+function updateHomeCoins(){
+  const homeCoins=document.getElementById("homeCoinBalance");
+  const equipmentBalance=document.getElementById("equipmentCoinBalance");
+
+  if(homeCoins) homeCoins.innerText=equipmentCoins;
+  if(equipmentBalance) equipmentBalance.innerText=equipmentCoins;
+}
+
+
+function saveEquipment(){
+  localStorage.setItem("raviEquipmentCoins",String(equipmentCoins));
+  localStorage.setItem("raviEquipmentOwned",JSON.stringify(equipmentOwned));
+  localStorage.setItem("raviEquipmentSelected",JSON.stringify(equipmentSelected));
+
+  updateHomeCoins();
+}
+
+// Apply saved items when the game loads
+  
+function renderShop(){
+  const content=document.getElementById("navPageContent");
+
+  let html=`
+    <div class="shopBalance">
+      🪙 YOUR COINS:
+      <span>${equipmentCoins}</span>
+    </div>
+    <p>Buy items using your game coins!</p>
+  `;
+
+  const categories=[
+    ["striker","🏏 STRIKERS"],
+    ["coins","⚫ COIN SKINS"],
+    ["strikerSkin","🎨 STRIKER COLORS"],
+    ["board","🪵 CARROM BOARDS"]
+  ];
+
+  categories.forEach(([category,title])=>{
+    html+=`
+      <h3 class="shopCategory">${title}</h3>
+      <div class="shopGrid">
+    `;
+
+    equipmentItems[category].forEach(item=>{
+      const owned=equipmentOwned.includes(item.id);
+      const selected=equipmentSelected[category]===item.id;
+
+      html+=`
+        <div class="shopCard">
+          <div class="shopIcon">${item.icon}</div>
+          <h4>${item.name}</h4>
+          <p>${item.price===0?"FREE":"🪙 "+item.price+" Coins"}</p>
+          ${
+            owned
+            ? `<button class="shopOwned" disabled>✅ OWNED</button>`
+            : `<button onclick="buyShopItem('${category}','${item.id}')">BUY</button>`
+          }
+          ${
+            owned
+            ? `<button onclick="useEquipment('${category}','${item.id}')">
+                ${selected?"✅ SELECTED":"SELECT"}
+               </button>`
+            : ""
+          }
+        </div>
+      `;
+    });
+
+    html+="</div>";
+  });
+
+  content.innerHTML=html;
+}
+
+function buyShopItem(category,id){
+  const group=equipmentItems[category];
+  if(!group)return;
+
+  const item=group.find(x=>x.id===id);
+  if(!item)return;
+
+  if(equipmentOwned.includes(item.id)){
+    alert("You already own this item!");
+    return;
+  }
+
+  if(equipmentCoins<item.price){
+    alert("Not enough Coins! Play games to earn more Coins.");
+    return;
+  }
+
+  equipmentCoins-=item.price;
+  equipmentOwned.push(item.id);
+
+  saveEquipment();
+  renderShop();
+
+  alert(item.name+" purchased successfully! Open Equipment to use it.");
+}
+
+
+function renderEquipment(){
+  const content=document.getElementById("navPageContent");
+
+  let html=`
+    <div class="equipmentBalance">
+      🪙 Your Coins: <span id="equipmentCoinBalance">${equipmentCoins}</span>
+    </div>
+  `;
+
+  const categories=[
+    ["striker","🏏 STRIKER"],
+    ["coins","⚫ COINS"],
+    ["strikerSkin","🎨 STRIKER SKINS"],
+    ["board","🪵 BOARD SKINS"]
+  ];
+
+  categories.forEach(([type,title])=>{
+    html+=`<h3 style="color:#8cf0ff">${title}</h3><div class="equipmentGrid">`;
+
+    equipmentItems[type].forEach(item=>{
+      const owned=equipmentOwned.includes(item.id);
+      const selected=equipmentSelected[type]===item.id;
+
+      html+=`
+        <div class="equipmentCard">
+          <div class="equipmentIcon">${item.icon}</div>
+          <h3>${item.name}</h3>
+          <p>${item.price===0?"FREE":"🪙 "+item.price}</p>
+          <button onclick="useEquipment('${type}','${item.id}')">
+            ${selected?"✅ SELECTED":owned?"SELECT":"BUY"}
+          </button>
+        </div>
+      `;
+    });
+
+    html+="</div>";
+  });
+
+  content.innerHTML=html;
+}
+
+function useEquipment(type,id){
+  const item=equipmentItems[type].find(x=>x.id===id);
+
+  if(!item)return;
+
+  if(!equipmentOwned.includes(id)){
+    if(equipmentCoins<item.price){
+      alert("Not enough Coins!");
+      return;
+    }
+
+    equipmentCoins-=item.price;
+    equipmentOwned.push(id);
+  }
+
+  equipmentSelected[type]=id;
+  saveEquipment();
+
+  // Apply selected board skin
+  if(type==="board"){
+    boardTheme=id;
+    document.getElementById("boardTheme").value=id;
+    draw();
+  }
+
+  renderEquipment();
+}
+// FRIENDS FOOTER PAGE
+
+// ===============================
+// RAVI CARROM EVENT SYSTEM
+// ===============================
+
+function getTodayKey(){
+  const d=new Date();
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+
+function getWeekKey(){
+  const d=new Date();
+  const first=new Date(d.getFullYear(),0,1);
+  const week=Math.ceil((((d-first)/86400000)+first.getDay()+1)/7);
+  return d.getFullYear()+"-W"+week;
+}
+
+// DAILY EVENT
+function claimDailyEvent(){
+  const today=getTodayKey();
+  const claimed=localStorage.getItem("raviDailyEvent");
+
+  if(claimed===today){
+    alert("Aaj ka Daily Reward pehle hi le chuke ho!");
+    return;
+  }
+
+  equipmentCoins+=100;
+  localStorage.setItem("raviDailyEvent",today);
+  saveEquipment();
+  renderEvent();
+
+  alert("🎁 Daily Reward mil gaya! +100 Coins");
+}
+
+// TOURNAMENT
+function joinTournament(){
+  const joined=localStorage.getItem("raviTournamentJoined");
+
+  if(joined==="yes"){
+    alert("Aap Tournament mein pehle se joined ho!");
+    return;
+  }
+
+  localStorage.setItem("raviTournamentJoined","yes");
+  renderEvent();
+  alert("🏆 Tournament mein aapka registration ho gaya!");
+}
+
+// WEEKLY CHALLENGE
+function claimWeeklyReward(){
+  const week=getWeekKey();
+  const claimed=localStorage.getItem("raviWeeklyReward");
+
+  if(claimed===week){
+    alert("Is week ka reward pehle hi le chuke ho!");
+    return;
+  }
+
+  const wins=Number(localStorage.getItem("raviWeeklyWins")||0);
+
+  if(wins<3){
+    alert("Weekly Reward ke liye 3 matches jeeto!");
+    return;
+  }
+
+  equipmentCoins+=300;
+  localStorage.setItem("raviWeeklyReward",week);
+  saveEquipment();
+  renderEvent();
+
+  alert("🥇 Weekly Challenge complete! +300 Coins");
+}
+
+// SPECIAL REWARD
+function claimSpecialReward(){
+  const claimed=localStorage.getItem("raviSpecialReward");
+
+  if(claimed==="yes"){
+    alert("Special Reward pehle hi mil chuka hai!");
+    return;
+  }
+
+  equipmentCoins+=250;
+  localStorage.setItem("raviSpecialReward","yes");
+  saveEquipment();
+  renderEvent();
+
+  alert("🎉 Special Reward mil gaya! +250 Coins");
+}
+
+// FRIENDS EVENT
+async function inviteEventFriends(){
+  const message=
+    "🎮 Join me in RAVI CARROM GAME! Let's play a Carrom challenge!";
+
+  try{
+    if(navigator.share){
+      await navigator.share({
+        title:"RAVI CARROM EVENT",
+        text:message
+      });
+    }else if(navigator.clipboard){
+      await navigator.clipboard.writeText(message);
+      alert("Invite message copied!");
+    }else{
+      alert(message);
+    }
+  }catch(error){
+    console.log("Invite cancelled");
+  }
+}
+
+// RENDER ALL EVENTS
+function renderEvent(){
+  const content=document.getElementById("navPageContent");
+
+  const today=getTodayKey();
+  const week=getWeekKey();
+
+  const dailyDone=
+    localStorage.getItem("raviDailyEvent")===today;
+
+  const tournamentJoined=
+    localStorage.getItem("raviTournamentJoined")==="yes";
+
+  const wins=gameStats.raviWins||0;
+  const weeklyDone=
+    localStorage.getItem("raviWeeklyReward")===week;
+
+  const specialDone=
+    localStorage.getItem("raviSpecialReward")==="yes";
+
+  const weeklyProgress=Math.min(100,(wins/3)*100);
+
+  content.innerHTML=`
+    <div class="eventHeader">🏆 RAVI SPECIAL EVENTS</div>
+
+    <div class="shopBalance">
+      🪙 YOUR COINS: <span>${equipmentCoins}</span>
+    </div>
+
+    <!-- TOURNAMENT -->
+    <div class="eventCard">
+      <h3>🏆 CARROM TOURNAMENT</h3>
+      <p>RAVI Carrom Tournament mein participate karo.</p>
+      <div class="eventReward">🎁 Reward: 500 Coins</div>
+      <p class="eventNote">
+        ${tournamentJoined
+          ?"✅ You are registered!"
+          :"Tournament registration open hai."}
+      </p>
+      <button onclick="joinTournament()"
+        ${tournamentJoined?"disabled":""}>
+        ${tournamentJoined?"✅ JOINED":"🏆 JOIN TOURNAMENT"}
+      </button>
+    </div>
+
+    <!-- DAILY EVENT -->
+    <div class="eventCard">
+      <h3>🎁 DAILY LOGIN REWARD</h3>
+      <p>Har din Event page par aakar apna reward claim karo.</p>
+      <div class="eventReward">🪙 Reward: 100 Coins</div>
+      <button onclick="claimDailyEvent()"
+        ${dailyDone?"disabled":""}>
+        ${dailyDone?"✅ CLAIMED TODAY":"🎁 CLAIM DAILY REWARD"}
+      </button>
+    </div>
+
+    <!-- WEEKLY CHALLENGE -->
+    <div class="eventCard">
+      <h3>🥇 WEEKLY CHALLENGE</h3>
+      <p>Is week 3 matches jeetkar challenge complete karo.</p>
+      <div class="eventProgress">
+        <span style="width:${weeklyProgress}%"></span>
+      </div>
+      <p>🏆 Wins: ${Math.min(wins,3)} / 3</p>
+      <div class="eventReward">🪙 Reward: 300 Coins</div>
+      <button onclick="claimWeeklyReward()"
+        ${weeklyDone||wins<3?"disabled":""}>
+        ${weeklyDone?"✅ REWARD CLAIMED":
+          wins<3?"🔒 WIN 3 MATCHES":"🥇 CLAIM WEEKLY REWARD"}
+      </button>
+    </div>
+
+    <!-- SPECIAL REWARD -->
+    <div class="eventCard">
+      <h3>🎉 SPECIAL BONUS</h3>
+      <p>Apna special bonus reward collect karo.</p>
+      <div class="eventReward">🪙 Reward: 250 Coins</div>
+      <button onclick="claimSpecialReward()"
+        ${specialDone?"disabled":""}>
+        ${specialDone?"✅ COLLECTED":"🎉 COLLECT BONUS"}
+      </button>
+    </div>
+
+    <!-- FRIENDS EVENT -->
+    <div class="eventCard">
+      <h3>👥 FRIENDS CHALLENGE</h3>
+      <p>Apne doston ko RAVI CARROM GAME ka invitation bhejo.</p>
+      <div class="eventReward">🎮 Play together and enjoy!</div>
+      <button onclick="inviteEventFriends()">
+        📩 INVITE FRIENDS
+      </button>
+    </div>
+  `;
+}
+function showNavPage(page){
+
+  if(page === "home"){
+    document.getElementById("navPage").style.display = "none";
+    document.getElementById("homeScreen").style.display = "flex";
+    return;
+  }
+
+  const navPage = document.getElementById("navPage");
+  const title = document.getElementById("navPageTitle");
+  const content = document.getElementById("navPageContent");
+
+  navPage.style.display = "flex";
+
+  if(page === "friends"){
+    title.innerText = "👥 FRIENDS";
+
+    content.innerHTML = `
+      <div class="friendsMenu">
+
+        <button class="friendAction" onclick="createCarromRoom()">
+          ➕ CREATE ROOM
+        </button>
+
+        <input id="joinRoomInput"
+          class="friendInput"
+          placeholder="Enter 6 Digit Room ID">
+
+        <button class="friendAction" onclick="joinCarromRoom()">
+          🚪 JOIN ROOM
+        </button>
+
+        <button class="friendAction" onclick="inviteCarromFriends()">
+          📩 INVITE FRIENDS
+        </button>
+
+        <input id="friendIdInput"
+          class="friendInput"
+          placeholder="Enter Friend ID">
+
+        <button class="friendAction" onclick="addCarromFriend()">
+          ➕ ADD FRIEND
+        </button>
+
+        <div id="friendMessage" class="friendMessage">
+          Welcome to Ravi Carrom Friends!
+        </div>
+
+        <div id="friendList"></div>
+      </div>
+    `;
+
+    renderFriendList();
+  }
+
+  else if(page==="equipment"){
+  title.innerText="🎯 EQUIPMENT";
+  renderEquipment();
+}
+else if(page==="shop"){
+  title.innerText="🛒 SHOP";
+  renderShop();
+}
+else if(page==="event"){
+  title.innerText="🏆 EVENTS";
+  renderEvent();
+}
+}
+
+
+function closeNavPage(){
+  document.getElementById("navPage").style.display = "none";
+}
+
+// FRIENDS SYSTEM
+let currentRoomID = "";
+let carromFriends =
+  JSON.parse(localStorage.getItem("raviCarromFriends") || "[]");
+
+function showFriendMessage(message){
+  const box = document.getElementById("friendMessage");
+  if(box) box.innerText = message;
+}
+
+function createCarromRoom(){
+  currentRoomID = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
+
+  showFriendMessage("Your Room ID: " + currentRoomID);
+}
+
+function joinCarromRoom(){
+  const input = document.getElementById("joinRoomInput");
+  const roomID = input.value.trim();
+
+  if(!/^[0-9]{6}$/.test(roomID)){
+    showFriendMessage("Please enter a valid 6 digit Room ID.");
+    return;
+  }
+
+  showFriendMessage(
+    "Room ID " + roomID +
+    " entered. Online room connection needs Firebase Database."
+  );
+}
+
+async function inviteCarromFriends(){
+  if(!currentRoomID){
+    showFriendMessage("First create a room!");
+    return;
+  }
+
+  const inviteText =
+    "Join my Ravi Carrom Room! Room ID: " + currentRoomID;
+
+  try{
+    if(navigator.share){
+      await navigator.share({
+        title:"Ravi Carrom",
+        text:inviteText
+      });
+    }else{
+      await navigator.clipboard.writeText(inviteText);
+      showFriendMessage("Invite message copied!");
+    }
+  }catch(error){
+    showFriendMessage("Invite cancelled or could not be shared.");
+  }
+}
+
+function addCarromFriend(){
+  const input = document.getElementById("friendIdInput");
+  const friendID = input.value.trim();
+
+  if(friendID.length < 3){
+    showFriendMessage("Please enter a valid Friend ID.");
+    return;
+  }
+
+  if(carromFriends.includes(friendID)){
+    showFriendMessage("Friend already added!");
+    return;
+  }
+
+  carromFriends.push(friendID);
+  localStorage.setItem(
+    "raviCarromFriends",
+    JSON.stringify(carromFriends)
+  );
+
+  input.value = "";
+  renderFriendList();
+  showFriendMessage("Friend added successfully!");
+}
+
+function renderFriendList(){
+  const list = document.getElementById("friendList");
+  if(!list) return;
+
+  list.innerHTML = "<h3>My Friends</h3>";
+
+  carromFriends.forEach(id=>{
+    const item = document.createElement("p");
+    item.innerText = "👤 " + id;
+    list.appendChild(item);
+  });
+}
+// LEAVE GAME FUNCTION
+function leaveGame(){
+
+  // Game stop
+  paused = true;
+  moving = false;
+  dragging = false;
+  positioningStriker = false;
+  robotThinking = false;
+  robotAim = null;
+  shotInProgress = false;
+
+  stopTurnTimer();
+
+  if(typeof stopFireworks === "function"){
+    stopFireworks();
+  }
+
+  // Hide game screen elements
+  document.querySelector("body > h1").style.display = "none";
+  document.querySelector(".scoreboard").style.display = "none";
+  document.querySelector(".statsBox").style.display = "none";
+  document.querySelector(".playersTop").style.display = "none";
+  document.getElementById("board").style.display = "none";
+  document.getElementById("pauseBtn").style.display = "none";
+  document.getElementById("leaveBtn").style.display = "none";
+
+  document.querySelector("body > p").style.display = "none";
+  // Striker Power panel hide
+const powerPanel = document.querySelector('div[style*="max-width:350px"]');
+
+if (powerPanel) {
+  powerPanel.style.display = "none";
+}
+
+  // Hide extra screens
+  document.getElementById("victoryScreen").style.display = "none";
+  document.getElementById("settingsPanel").style.display = "none";
+  document.getElementById("avatarPreview").style.display = "none";
+
+  // Show Home
+  document.getElementById("homeScreen").style.display = "flex";
+
+  // Reset button text
+  document.getElementById("pauseBtn").innerText = "⏸ Pause";
+}
+
 </script>
 </body>
 </html>
